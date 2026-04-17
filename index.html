@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CUN-hoot | Semana C</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f3f2f8; text-align: center; margin: 0; padding: 20px; }
+    .contenedor { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    input { width: 90%; padding: 12px; font-size: 16px; border: 2px solid #ccc; border-radius: 8px; margin-bottom: 20px; }
+    .btn { padding: 15px; font-size: 18px; font-weight: bold; color: white; border: none; border-radius: 8px; cursor: pointer; width: 100%; margin-bottom: 10px; }
+    .btn-inicio { background-color: #002b5c; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 20px; }
+    .color-0 { background: #e21b3c; } .color-1 { background: #1368ce; } .color-2 { background: #d89e00; } .color-3 { background: #26890c; }
+  </style>
+</head>
+<body>
+
+  <div class="contenedor" id="pantalla-inicio">
+    <h1 style="color: #002b5c;">🚀 CUN-hoot - Sede G</h1>
+    <p>Ingresa tu nombre para comenzar a sumar Sys-Points</p>
+    <input type="text" id="nombre-jugador" placeholder="Ej. Juan Pérez - Cod: 12345">
+    <button class="btn btn-inicio" onclick="iniciarJuego()">EMPEZAR</button>
+  </div>
+
+  <div class="contenedor" id="pantalla-juego" style="display:none;">
+    <h2 id="texto-pregunta">Cargando...</h2>
+    <div id="opciones" class="grid"></div>
+    <p style="margin-top:20px; font-weight:bold;">Puntos: <span id="puntos">0</span></p>
+  </div>
+
+  <div class="contenedor" id="pantalla-final" style="display:none;">
+    <h2>¡Reto Completado! 🏆</h2>
+    <p id="mensaje-final" style="font-size: 24px; font-weight: bold;"></p>
+    <p id="estado-guardado">Guardando tus puntos en el sistema...</p>
+  </div>
+
+  <script src="preguntas.js"></script>
+  
+  <script>
+    const API_URL = "https://script.google.com/a/macros/cun.edu.co/s/AKfycbyzGsT_dD_IISaFfCCEL6HYo9NrAjBwg4xsb56dNXEEZpyJFUexHWUWeJZDNMzoUh4r8Q/exec";
+    
+    let nombre = "";
+    let indice = 0;
+    let puntaje = 0;
+
+    function iniciarJuego() {
+      nombre = document.getElementById('nombre-jugador').value;
+      if(nombre.trim() === "") { alert("Por favor, ingresa tu nombre."); return; }
+      
+      document.getElementById('pantalla-inicio').style.display = 'none';
+      document.getElementById('pantalla-juego').style.display = 'block';
+      mostrarPregunta();
+    }
+
+    function mostrarPregunta() {
+      if(indice >= preguntasPrimerSemestre.length) {
+        finalizarJuego();
+        return;
+      }
+      
+      const p = preguntasPrimerSemestre[indice];
+      document.getElementById('texto-pregunta').innerText = p.pregunta;
+      
+      let html = "";
+      p.opciones.forEach((opcion, i) => {
+        html += `<button class="btn color-${i}" onclick="verificar(${i}, ${p.correcta})">${opcion}</button>`;
+      });
+      document.getElementById('opciones').innerHTML = html;
+    }
+
+    function verificar(seleccionada, correcta) {
+      if(seleccionada === correcta) {
+        puntaje += 100;
+        document.getElementById('puntos').innerText = puntaje;
+      }
+      indice++;
+      mostrarPregunta();
+    }
+
+    function finalizarJuego() {
+      document.getElementById('pantalla-juego').style.display = 'none';
+      document.getElementById('pantalla-final').style.display = 'block';
+      document.getElementById('mensaje-final').innerText = `Obtuviste ${puntaje} Sys-Points`;
+      
+      enviarPuntaje();
+    }
+
+    function enviarPuntaje() {
+      fetch(API_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+          nombre: nombre,
+          semestre: "1er Semestre",
+          puntaje: puntaje
+        }),
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' } 
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('estado-guardado').innerText = "✅ ¡Puntos guardados exitosamente!";
+        document.getElementById('estado-guardado').style.color = "green";
+      })
+      .catch(error => {
+        document.getElementById('estado-guardado').innerText = "⚠️ Hubo un error al guardar. Toma captura de pantalla a tu puntaje.";
+        document.getElementById('estado-guardado').style.color = "red";
+      });
+    }
+  </script>
+
+</body>
+</html>
