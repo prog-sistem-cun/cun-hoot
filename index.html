@@ -72,15 +72,53 @@
     .color-0 { background: var(--k-red); } .color-1 { background: var(--k-blue); } 
     .color-2 { background: var(--k-yellow); } .color-3 { background: var(--k-green); }
 
-    /* Barra de Progreso (Timer) */
-    .timer-container { 
-      width: 100%; height: 12px; background: #e1e1e1; 
-      border-radius: 6px; overflow: hidden; margin-bottom: 20px; 
+    /* --- NUEVO: ESTILOS DEL TEMPORIZADOR CIRCULAR --- */
+    .timer-container-center {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
     }
-    #progress-bar { 
-      height: 100%; width: 100%; background: var(--k-green); 
-      transition: width 1s linear, background-color 0.3s; 
+
+    .timer-wrapper {
+      position: relative;
+      width: 80px;  /* Ajustado para que no ocupe tanto espacio */
+      height: 80px;
     }
+
+    .timer-svg {
+      transform: rotate(-90deg);
+      width: 100%;
+      height: 100%;
+    }
+
+    .timer-bg {
+      fill: none;
+      stroke: #e1e1e1;
+      stroke-width: 8;
+    }
+
+    .timer-path {
+      fill: none;
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 283;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 1s linear, stroke 0.3s ease;
+    }
+
+    .timer-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .color-seguro { stroke: var(--k-green); }    
+    .color-alerta { stroke: var(--k-yellow); }    
+    .color-peligro { stroke: var(--k-red); }   
 
     /* Estado superior del juego */
     .stats { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 15px; color: #666; font-size: 14px; }
@@ -116,13 +154,15 @@
       <span>Sys-Points: <span id="puntos">0</span></span>
     </div>
     
- <div class="timer-wrapper">
-    <svg class="timer-svg" viewBox="0 0 100 100">
-      <circle class="timer-bg" cx="50" cy="50" r="45"></circle>
-      <circle class="timer-path color-seguro" id="timer-path" cx="50" cy="50" r="45"></circle>
-    </svg>
-    <span class="timer-text" id="timer-text">30</span>
-  </div>
+    <div class="timer-container-center">
+      <div class="timer-wrapper">
+        <svg class="timer-svg" viewBox="0 0 100 100">
+          <circle class="timer-bg" cx="50" cy="50" r="45"></circle>
+          <circle class="timer-path color-seguro" id="timer-path" cx="50" cy="50" r="45"></circle>
+        </svg>
+        <span class="timer-text" id="timer-text">30</span>
+      </div>
+    </div>
 
     <h2 id="texto-pregunta" style="min-height: 60px; font-size: 20px;">Cargando...</h2>
     
@@ -144,13 +184,14 @@
     // --- CONFIGURACIÓN ---
     const API_URL = "https://script.google.com/macros/s/AKfycbyeyQAz_CQuuCMwCTPGTTiEOthWTDhcEK1AuOvYfJbGC50NaiQ8OTJcf4jbnd3walbghw/exec";
     const TIEMPO_POR_PREGUNTA = 30; // 30 segundos
+    const CIRCUNFERENCIA = 283; // Perímetro del círculo SVG
     
     let identificacion = "";
     let nombre = "";
     let indice = 0;
     let puntaje = 0;
     let tiempoRestante = 0;
-    let timerInterval;
+    let timerInterval = null;
 
     // Generar QR dinámico al cargar la página
     window.onload = () => {
@@ -190,44 +231,59 @@
       document.getElementById('opciones').innerHTML = html;
 
       iniciarTemporizador();
-      actualizarAnillo(tiempoRestante);
-      actualizarColor(tiempoRestante);
     }
 
+    // --- LÓGICA DEL TEMPORIZADOR CIRCULAR CORREGIDA ---
     function iniciarTemporizador() {
       clearInterval(timerInterval);
       tiempoRestante = TIEMPO_POR_PREGUNTA;
-      actualizarBarraUI();
+      
+      // Estado inicial visual
+      document.getElementById("timer-text").innerText = tiempoRestante;
+      actualizarAnillo(tiempoRestante);
+      actualizarColor(tiempoRestante);
 
       timerInterval = setInterval(() => {
         tiempoRestante--;
-        actualizarBarraUI();
+        
+        document.getElementById("timer-text").innerText = tiempoRestante;
+        actualizarAnillo(tiempoRestante);
+        actualizarColor(tiempoRestante);
 
         if(tiempoRestante <= 0) {
           clearInterval(timerInterval);
-          // Si se acaba el tiempo, se toma como incorrecta y pasa a la siguiente
+          // Si se acaba el tiempo, pasa a la siguiente pregunta (incorrecta implícitamente)
           indice++;
           mostrarPregunta();
         }
       }, 1000);
     }
 
-    function actualizarBarraUI() {
-      const barra = document.getElementById('progress-bar');
-      const porcentaje = (tiempoRestante / TIEMPO_POR_PREGUNTA) * 100;
-      barra.style.width = `${porcentaje}%`;
-
-      // Cambiar color según el tiempo restante
-      if (porcentaje > 50) barra.style.background = "var(--k-green)";
-      else if (porcentaje > 20) barra.style.background = "var(--k-yellow)";
-      else barra.style.background = "var(--k-red)";
+    function actualizarAnillo(tiempo) {
+      const fraccion = tiempo / TIEMPO_POR_PREGUNTA;
+      const desplazamiento = CIRCUNFERENCIA - (fraccion * CIRCUNFERENCIA);
+      document.getElementById("timer-path").style.strokeDashoffset = desplazamiento;
     }
+
+    function actualizarColor(tiempo) {
+      const path = document.getElementById("timer-path");
+      path.classList.remove("color-seguro", "color-alerta", "color-peligro");
+      
+      if (tiempo > 15) {
+        path.classList.add("color-seguro");
+      } else if (tiempo > 5) {
+        path.classList.add("color-alerta");
+      } else {
+        path.classList.add("color-peligro");
+      }
+    }
+    // -------------------------------------------------
 
     function verificar(seleccionada, correcta) {
       clearInterval(timerInterval); // Detener el timer al responder
       
       if(seleccionada === correcta) {
-        // Puntos base + bono por velocidad (máx 100pts totales por pregunta)
+        // Puntos base + bono por velocidad
         const puntosBase = 50;
         const bonoVelocidad = Math.round((tiempoRestante / TIEMPO_POR_PREGUNTA) * 50);
         puntaje += (puntosBase + bonoVelocidad);
