@@ -72,7 +72,7 @@
     .color-0 { background: var(--k-red); } .color-1 { background: var(--k-blue); } 
     .color-2 { background: var(--k-yellow); } .color-3 { background: var(--k-green); }
 
-    /* --- NUEVO: ESTILOS DEL TEMPORIZADOR CIRCULAR --- */
+    /* --- ESTILOS DEL TEMPORIZADOR CIRCULAR --- */
     .timer-container-center {
       display: flex;
       justify-content: center;
@@ -81,7 +81,7 @@
 
     .timer-wrapper {
       position: relative;
-      width: 80px;  /* Ajustado para que no ocupe tanto espacio */
+      width: 80px; 
       height: 80px;
     }
 
@@ -225,7 +225,6 @@
       
       let html = "";
       p.opciones.forEach((opcion, i) => {
-        // Escapamos comillas simples para evitar errores si la opción tiene apostrofes
         html += `<button class="btn color-${i}" onclick="verificar(${i}, ${p.correcta})">${opcion}</button>`;
       });
       document.getElementById('opciones').innerHTML = html;
@@ -233,7 +232,6 @@
       iniciarTemporizador();
     }
 
-    // --- LÓGICA DEL TEMPORIZADOR CIRCULAR CORREGIDA ---
     function iniciarTemporizador() {
       clearInterval(timerInterval);
       tiempoRestante = TIEMPO_POR_PREGUNTA;
@@ -252,7 +250,6 @@
 
         if(tiempoRestante <= 0) {
           clearInterval(timerInterval);
-          // Si se acaba el tiempo, pasa a la siguiente pregunta (incorrecta implícitamente)
           indice++;
           mostrarPregunta();
         }
@@ -277,13 +274,11 @@
         path.classList.add("color-peligro");
       }
     }
-    // -------------------------------------------------
 
     function verificar(seleccionada, correcta) {
-      clearInterval(timerInterval); // Detener el timer al responder
+      clearInterval(timerInterval); 
       
       if(seleccionada === correcta) {
-        // Puntos base + bono por velocidad
         const puntosBase = 50;
         const bonoVelocidad = Math.round((tiempoRestante / TIEMPO_POR_PREGUNTA) * 50);
         puntaje += (puntosBase + bonoVelocidad);
@@ -329,6 +324,5 @@
       });
     }
   </script>
-
 </body>
 </html>
