@@ -5,51 +5,166 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CUN-hoot | Semana C</title>
   <style>
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f3f2f8; text-align: center; margin: 0; padding: 20px; }
-    .contenedor { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    input { width: 90%; padding: 12px; font-size: 16px; border: 2px solid #ccc; border-radius: 8px; margin-bottom: 20px; }
-    .btn { padding: 15px; font-size: 18px; font-weight: bold; color: white; border: none; border-radius: 8px; cursor: pointer; width: 100%; margin-bottom: 10px; }
-    .btn-inicio { background-color: #002b5c; }
-    .grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 20px; }
-    .color-0 { background: #e21b3c; } .color-1 { background: #1368ce; } .color-2 { background: #d89e00; } .color-3 { background: #26890c; }
+    /* Variables de color institucionales y de Kahoot */
+    :root {
+      --cun-blue: #002b5c;
+      --cun-gold: #d89e00;
+      --bg-color: #f0f2f5;
+      --k-red: #e21b3c;
+      --k-blue: #1368ce;
+      --k-yellow: #d89e00;
+      --k-green: #26890c;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body { 
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+      background-color: var(--bg-color); 
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 15px;
+    }
+
+    .contenedor { 
+      width: 100%;
+      max-width: 500px; 
+      background: white; 
+      padding: 30px; 
+      border-radius: 16px; 
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1); 
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    h1, h2 { color: var(--cun-blue); margin-bottom: 15px; }
+
+    /* Estilos del Formulario */
+    .form-group { margin-bottom: 15px; text-align: left; }
+    .form-group label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px; color: #555; }
+    input { 
+      width: 100%; padding: 12px; font-size: 16px; 
+      border: 2px solid #e1e1e1; border-radius: 8px; 
+      outline: none; transition: border-color 0.2s;
+    }
+    input:focus { border-color: var(--cun-blue); }
+
+    /* Código QR */
+    .qr-container { margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 12px; }
+    #qr-img { width: 150px; height: 150px; border-radius: 8px; }
+
+    /* Botones */
+    .btn { 
+      width: 100%; padding: 16px; font-size: 18px; font-weight: bold; 
+      color: white; border: none; border-radius: 8px; cursor: pointer; 
+      transition: transform 0.1s, filter 0.2s; 
+      box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+    }
+    .btn:active { transform: translateY(4px); box-shadow: 0 0 0 rgba(0,0,0,0); }
+    .btn-inicio { background-color: var(--cun-blue); margin-top: 10px; }
+
+    /* Grid de Opciones */
+    .grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
+    @media (min-width: 400px) { .grid { grid-template-columns: 1fr 1fr; } }
+    .color-0 { background: var(--k-red); } .color-1 { background: var(--k-blue); } 
+    .color-2 { background: var(--k-yellow); } .color-3 { background: var(--k-green); }
+
+    /* Barra de Progreso (Timer) */
+    .timer-container { 
+      width: 100%; height: 12px; background: #e1e1e1; 
+      border-radius: 6px; overflow: hidden; margin-bottom: 20px; 
+    }
+    #progress-bar { 
+      height: 100%; width: 100%; background: var(--k-green); 
+      transition: width 1s linear, background-color 0.3s; 
+    }
+
+    /* Estado superior del juego */
+    .stats { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 15px; color: #666; font-size: 14px; }
+    
+    .oculto { display: none !important; }
   </style>
 </head>
 <body>
 
   <div class="contenedor" id="pantalla-inicio">
-    <h1 style="color: #002b5c;">🚀 CUN-hoot - Sede G</h1>
-    <p>Ingresa tu nombre para comenzar a sumar Sys-Points</p>
-    <input type="text" id="nombre-jugador" placeholder="Ej. Juan Pérez - Cod: 12345">
-    <button class="btn btn-inicio" onclick="iniciarJuego()">EMPEZAR</button>
+    <h1>🚀 Reto Semana C</h1>
+    
+    <div class="qr-container">
+      <p style="font-size: 12px; margin-bottom: 10px; color: #666;">Escanea para jugar desde tu móvil</p>
+      <img id="qr-img" src="" alt="Código QR del Juego">
+    </div>
+
+    <div class="form-group">
+      <label for="id-jugador">Número de Identificación</label>
+      <input type="number" id="id-jugador" placeholder="Ej. 1002345678" required>
+    </div>
+    <div class="form-group">
+      <label for="nombre-jugador">Nombre Completo</label>
+      <input type="text" id="nombre-jugador" placeholder="Ej. Juan Pérez" required>
+    </div>
+
+    <button class="btn btn-inicio" onclick="iniciarJuego()">ENTRAR AL RETO</button>
   </div>
 
-  <div class="contenedor" id="pantalla-juego" style="display:none;">
-    <h2 id="texto-pregunta">Cargando...</h2>
+  <div class="contenedor oculto" id="pantalla-juego">
+    <div class="stats">
+      <span id="contador-preguntas">Pregunta 1/X</span>
+      <span>Sys-Points: <span id="puntos">0</span></span>
+    </div>
+    
+    <div class="timer-container">
+      <div id="progress-bar"></div>
+    </div>
+
+    <h2 id="texto-pregunta" style="min-height: 60px; font-size: 20px;">Cargando...</h2>
+    
     <div id="opciones" class="grid"></div>
-    <p style="margin-top:20px; font-weight:bold;">Puntos: <span id="puntos">0</span></p>
   </div>
 
-  <div class="contenedor" id="pantalla-final" style="display:none;">
+  <div class="contenedor oculto" id="pantalla-final">
     <h2>¡Reto Completado! 🏆</h2>
-    <p id="mensaje-final" style="font-size: 24px; font-weight: bold;"></p>
-    <p id="estado-guardado">Guardando tus puntos en el sistema...</p>
+    <p style="font-size: 40px; font-weight: bold; color: var(--cun-blue); margin: 20px 0;" id="mensaje-final"></p>
+    <p>Sys-Points Obtenidos</p>
+    <div id="estado-guardado" style="margin-top: 20px; padding: 15px; border-radius: 8px; font-weight: bold; background: #f8f9fa;">
+      Sincronizando con la Sede G...
+    </div>
   </div>
 
   <script src="preguntas.js"></script>
   
   <script>
+    // --- CONFIGURACIÓN ---
     const API_URL = "https://script.google.com/macros/s/AKfycbyeyQAz_CQuuCMwCTPGTTiEOthWTDhcEK1AuOvYfJbGC50NaiQ8OTJcf4jbnd3walbghw/exec";
+    const TIEMPO_POR_PREGUNTA = 30; // 30 segundos
     
+    let identificacion = "";
     let nombre = "";
     let indice = 0;
     let puntaje = 0;
+    let tiempoRestante = 0;
+    let timerInterval;
+
+    // Generar QR dinámico al cargar la página
+    window.onload = () => {
+      const urlActual = encodeURIComponent(window.location.href);
+      document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${urlActual}`;
+    };
 
     function iniciarJuego() {
+      identificacion = document.getElementById('id-jugador').value;
       nombre = document.getElementById('nombre-jugador').value;
-      if(nombre.trim() === "") { alert("Por favor, ingresa tu nombre."); return; }
       
-      document.getElementById('pantalla-inicio').style.display = 'none';
-      document.getElementById('pantalla-juego').style.display = 'block';
+      if(identificacion.trim() === "" || nombre.trim() === "") { 
+        alert("Por favor, completa ambos campos para registrar tus puntos."); 
+        return; 
+      }
+      
+      document.getElementById('pantalla-inicio').classList.add('oculto');
+      document.getElementById('pantalla-juego').classList.remove('oculto');
       mostrarPregunta();
     }
 
@@ -61,27 +176,67 @@
       
       const p = preguntasPrimerSemestre[indice];
       document.getElementById('texto-pregunta').innerText = p.pregunta;
+      document.getElementById('contador-preguntas').innerText = `Pregunta ${indice + 1}/${preguntasPrimerSemestre.length}`;
       
       let html = "";
       p.opciones.forEach((opcion, i) => {
+        // Escapamos comillas simples para evitar errores si la opción tiene apostrofes
         html += `<button class="btn color-${i}" onclick="verificar(${i}, ${p.correcta})">${opcion}</button>`;
       });
       document.getElementById('opciones').innerHTML = html;
+
+      iniciarTemporizador();
+    }
+
+    function iniciarTemporizador() {
+      clearInterval(timerInterval);
+      tiempoRestante = TIEMPO_POR_PREGUNTA;
+      actualizarBarraUI();
+
+      timerInterval = setInterval(() => {
+        tiempoRestante--;
+        actualizarBarraUI();
+
+        if(tiempoRestante <= 0) {
+          clearInterval(timerInterval);
+          // Si se acaba el tiempo, se toma como incorrecta y pasa a la siguiente
+          indice++;
+          mostrarPregunta();
+        }
+      }, 1000);
+    }
+
+    function actualizarBarraUI() {
+      const barra = document.getElementById('progress-bar');
+      const porcentaje = (tiempoRestante / TIEMPO_POR_PREGUNTA) * 100;
+      barra.style.width = `${porcentaje}%`;
+
+      // Cambiar color según el tiempo restante
+      if (porcentaje > 50) barra.style.background = "var(--k-green)";
+      else if (porcentaje > 20) barra.style.background = "var(--k-yellow)";
+      else barra.style.background = "var(--k-red)";
     }
 
     function verificar(seleccionada, correcta) {
+      clearInterval(timerInterval); // Detener el timer al responder
+      
       if(seleccionada === correcta) {
-        puntaje += 100;
+        // Puntos base + bono por velocidad (máx 100pts totales por pregunta)
+        const puntosBase = 50;
+        const bonoVelocidad = Math.round((tiempoRestante / TIEMPO_POR_PREGUNTA) * 50);
+        puntaje += (puntosBase + bonoVelocidad);
         document.getElementById('puntos').innerText = puntaje;
       }
+      
       indice++;
       mostrarPregunta();
     }
 
     function finalizarJuego() {
-      document.getElementById('pantalla-juego').style.display = 'none';
-      document.getElementById('pantalla-final').style.display = 'block';
-      document.getElementById('mensaje-final').innerText = `Obtuviste ${puntaje} Sys-Points`;
+      clearInterval(timerInterval);
+      document.getElementById('pantalla-juego').classList.add('oculto');
+      document.getElementById('pantalla-final').classList.remove('oculto');
+      document.getElementById('mensaje-final').innerText = puntaje;
       
       enviarPuntaje();
     }
@@ -90,20 +245,25 @@
       fetch(API_URL, {
         method: 'POST',
         body: JSON.stringify({
+          identificacion: identificacion,
           nombre: nombre,
           semestre: "1er Semestre",
           puntaje: puntaje
         }),
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' } 
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
       })
       .then(response => response.json())
       .then(data => {
-        document.getElementById('estado-guardado').innerText = "✅ ¡Puntos guardados exitosamente!";
-        document.getElementById('estado-guardado').style.color = "green";
+        const estado = document.getElementById('estado-guardado');
+        estado.innerText = "✅ ¡Registro exitoso! Puntos asegurados.";
+        estado.style.background = "#d4edda";
+        estado.style.color = "#155724";
       })
       .catch(error => {
-        document.getElementById('estado-guardado').innerText = "⚠️ Hubo un error al guardar. Toma captura de pantalla a tu puntaje.";
-        document.getElementById('estado-guardado').style.color = "red";
+        const estado = document.getElementById('estado-guardado');
+        estado.innerText = "⚠️ Error de red. Por favor toma captura de tu puntaje y envíala a tu docente.";
+        estado.style.background = "#f8d7da";
+        estado.style.color = "#721c24";
       });
     }
   </script>
