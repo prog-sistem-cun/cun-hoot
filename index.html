@@ -116,9 +116,13 @@
       <span>Sys-Points: <span id="puntos">0</span></span>
     </div>
     
-    <div class="timer-container">
-      <div id="progress-bar"></div>
-    </div>
+ <div class="timer-wrapper">
+    <svg class="timer-svg" viewBox="0 0 100 100">
+      <circle class="timer-bg" cx="50" cy="50" r="45"></circle>
+      <circle class="timer-path color-seguro" id="timer-path" cx="50" cy="50" r="45"></circle>
+    </svg>
+    <span class="timer-text" id="timer-text">30</span>
+  </div>
 
     <h2 id="texto-pregunta" style="min-height: 60px; font-size: 20px;">Cargando...</h2>
     
