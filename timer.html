@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Temporizador Estilo Kahoot</title>
+  <style>
+    /* Estilos base para centrar la demostración */
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f0f2f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+    }
+
+    /* --- ESTILOS DEL TEMPORIZADOR --- */
+    .timer-wrapper {
+      position: relative;
+      width: 120px;
+      height: 120px;
+    }
+
+    /* El SVG gira -90deg para que el progreso empiece desde arriba (las 12 en punto) */
+    .timer-svg {
+      transform: rotate(-90deg);
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Círculo de fondo (gris) */
+    .timer-bg {
+      fill: none;
+      stroke: #e1e1e1;
+      stroke-width: 8;
+    }
+
+    /* Círculo de progreso animado */
+    .timer-path {
+      fill: none;
+      stroke-width: 8;
+      stroke-linecap: round;
+      /* 283 es la circunferencia del círculo (2 * pi * radio(45)) */
+      stroke-dasharray: 283;
+      stroke-dashoffset: 0;
+      /* Animación suave para el trazo y el cambio de color */
+      transition: stroke-dashoffset 1s linear, stroke 0.3s ease;
+    }
+
+    /* El número en el centro */
+    .timer-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 40px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    /* Colores dinámicos del borde */
+    .color-seguro { stroke: #26890c; }    /* Verde */
+    .color-alerta { stroke: #d89e00; }    /* Amarillo */
+    .color-peligro { stroke: #e21b3c; }   /* Rojo */
+    
+    /* Botón de prueba */
+    button {
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #002b5c;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="timer-wrapper">
+    <svg class="timer-svg" viewBox="0 0 100 100">
+      <circle class="timer-bg" cx="50" cy="50" r="45"></circle>
+      <circle class="timer-path color-seguro" id="timer-path" cx="50" cy="50" r="45"></circle>
+    </svg>
+    <span class="timer-text" id="timer-text">30</span>
+  </div>
+
+  <button onclick="reiniciarTemporizador()">Reiniciar Timer</button>
+
+  <script>
+    const TIEMPO_LIMITE = 30; // Segundos
+    const CIRCUNFERENCIA = 283; // Perímetro del círculo SVG
+    
+    let tiempoRestante = TIEMPO_LIMITE;
+    let timerInterval = null;
+
+    // Función para iniciar la cuenta regresiva
+    function iniciarTemporizador() {
+      // Limpiar cualquier intervalo previo por seguridad
+      clearInterval(timerInterval);
+      
+      // Restablecer valores visuales
+      tiempoRestante = TIEMPO_LIMITE;
+      document.getElementById("timer-text").innerText = tiempoRestante;
+      actualizarColor(tiempoRestante);
+      actualizarAnillo(tiempoRestante);
+
+      // Iniciar el ciclo cada 1 segundo (1000 ms)
+      timerInterval = setInterval(() => {
+        tiempoRestante--;
+        
+        // Actualizar el número en pantalla
+        document.getElementById("timer-text").innerText = tiempoRestante;
+        
+        // Actualizar la animación del SVG
+        actualizarAnillo(tiempoRestante);
+        actualizarColor(tiempoRestante);
+
+        // Detener cuando llega a cero
+        if (tiempoRestante <= 0) {
+          clearInterval(timerInterval);
+          tiempoAgotado();
+        }
+      }, 1000);
+    }
+
+    // Calcula cuánto debe "vaciarse" el círculo
+    function actualizarAnillo(tiempo) {
+      const fraccion = tiempo / TIEMPO_LIMITE;
+      // dashoffset mueve la línea. Cuando es 283, el círculo está vacío.
+      const desplazamiento = CIRCUNFERENCIA - (fraccion * CIRCUNFERENCIA);
+      document.getElementById("timer-path").style.strokeDashoffset = desplazamiento;
+    }
+
+    // Cambia el color dependiendo de los segundos restantes
+    function actualizarColor(tiempo) {
+      const path = document.getElementById("timer-path");
+      
+      // Limpiar clases de colores anteriores
+      path.classList.remove("color-seguro", "color-alerta", "color-peligro");
+      
+      if (tiempo > 15) {
+        path.classList.add("color-seguro"); // Verde (> 15s)
+      } else if (tiempo > 5) {
+        path.classList.add("color-alerta"); // Amarillo (15s - 6s)
+      } else {
+        path.classList.add("color-peligro"); // Rojo (5s o menos)
+      }
+    }
+
+    // Lo que sucede cuando el tiempo llega a cero
+    function tiempoAgotado() {
+      // Aquí pondrías la lógica de tu juego para saltar a la siguiente pregunta
+      console.log("¡Tiempo agotado!");
+      document.getElementById("timer-text").innerText = "0";
+    }
+
+    // Función extra para el botón de prueba
+    function reiniciarTemporizador() {
+      iniciarTemporizador();
+    }
+
+    // Arrancar el temporizador automáticamente al cargar la página
+    iniciarTemporizador();
+  </script>
+</body>
+</html>
