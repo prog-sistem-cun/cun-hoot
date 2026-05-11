@@ -9,7 +9,6 @@
       --azul:      #002b5c;
       --azul-dark: #001a3a;
       --oro:       #ffc107;
-      --oro-dark:  #e6a800;
       --verde:     #1db954;
       --rojo:      #e53935;
       --naranja:   #ff6d00;
@@ -17,7 +16,6 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: 'Segoe UI', system-ui, sans-serif;
       background: linear-gradient(135deg, var(--azul-dark) 0%, #003d82 100%);
@@ -26,679 +24,499 @@
       flex-direction: column;
     }
 
-    /* ── HEADER ───────────────────────────────────────────── */
+    /* ── HEADER ─────────────────────────────────────────────── */
     header {
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0,0,0,0.3);
       backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
       color: #fff;
-      padding: 12px 20px;
+      padding: 10px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
     }
-
-    .header-logo { font-weight: 900; font-size: 20px; letter-spacing: -0.5px; }
-    .header-logo span { color: var(--oro); }
-
-    .header-info {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      font-size: 13px;
-      flex-wrap: wrap;
-    }
-
+    .h-logo { font-weight: 900; font-size: 20px; }
+    .h-logo span { color: var(--oro); }
+    .h-info { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .badge {
       background: rgba(255,255,255,0.12);
       border: 1px solid rgba(255,255,255,0.2);
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      white-space: nowrap;
+      padding: 3px 11px; border-radius: 20px; font-size: 12px; white-space: nowrap;
     }
-
     .badge-email { color: var(--oro); font-weight: 600; }
 
-    /* ── CONTAINER ────────────────────────────────────────── */
+    /* ── CONTAINER ───────────────────────────────────────────── */
     .container {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 20px 16px 30px;
+      flex: 1; display: flex; justify-content: center;
+      align-items: flex-start; padding: 18px 14px 30px;
     }
-
     .card {
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-      width: 100%;
-      max-width: 640px;
-      padding: 28px 24px 24px;
-      animation: aparecer 0.35s ease-out both;
+      background: #fff; border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+      width: 100%; max-width: 640px;
+      padding: 26px 22px 22px;
+      animation: aparecer .35s ease-out both;
     }
-
     @keyframes aparecer {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from { opacity:0; transform:translateY(22px); }
+      to   { opacity:1; transform:translateY(0); }
     }
 
-    /* ── META-INFO (pregunta X de Y / puntos) ─────────────── */
-    .meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 13px;
-      font-weight: 600;
-      color: #6b7280;
-      margin-bottom: 12px;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .puntos-badge {
-      background: var(--azul);
-      color: var(--oro);
-      padding: 4px 14px;
-      border-radius: 20px;
-      font-size: 14px;
-      font-weight: 800;
-    }
-
-    /* ── BARRA DE PROGRESO DE TIEMPO ─────────────────────── */
-    .barra-wrap {
-      width: 100%;
-      height: 14px;
-      background: #e5e7eb;
-      border-radius: 7px;
-      overflow: hidden;
-      margin-bottom: 20px;
-      position: relative;
-    }
-
-    .barra-tiempo {
-      height: 100%;
-      width: 100%;
-      background: var(--verde);
-      border-radius: 7px;
-      transition: width 0.1s linear, background-color 0.4s ease;
-    }
-
-    .barra-seg {
-      position: absolute;
-      right: 8px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 10px;
-      font-weight: 700;
-      color: rgba(0,0,0,0.45);
-      pointer-events: none;
-    }
-
-    /* ── PREGUNTA ─────────────────────────────────────────── */
-    .txt-pregunta {
-      font-size: clamp(16px, 3.5vw, 22px);
-      font-weight: 700;
-      color: var(--azul-dark);
-      line-height: 1.4;
-      text-align: center;
-      margin-bottom: 24px;
-      min-height: 60px;
-    }
-
-    /* ── GRID OPCIONES ────────────────────────────────────── */
-    .grid-opciones {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    @media (max-width: 400px) {
-      .grid-opciones { grid-template-columns: 1fr; }
-    }
-
-    /* Colores tipo Kahoot para cada opción */
-    .btn-opcion {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border: none;
-      padding: 18px 14px;
-      border-radius: var(--radio);
-      font-size: clamp(13px, 2.5vw, 15px);
-      font-weight: 700;
-      color: #fff;
-      cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
-      box-shadow: 0 5px 0 rgba(0,0,0,0.25);
-      text-align: left;
-      word-break: break-word;
-      line-height: 1.3;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn-opcion:nth-child(1) { background: #e53935; box-shadow: 0 5px 0 #b71c1c; }
-    .btn-opcion:nth-child(2) { background: #1565c0; box-shadow: 0 5px 0 #0d47a1; }
-    .btn-opcion:nth-child(3) { background: #f9a825; box-shadow: 0 5px 0 #f57f17; color: #1a1a1a; }
-    .btn-opcion:nth-child(4) { background: #2e7d32; box-shadow: 0 5px 0 #1b5e20; }
-
-    .btn-opcion:hover:not(:disabled) {
-      transform: translateY(-3px);
-      filter: brightness(1.1);
-    }
-
-    .btn-opcion:active:not(:disabled) {
-      transform: translateY(3px);
-      box-shadow: 0 1px 0 rgba(0,0,0,0.25) !important;
-    }
-
-    .btn-opcion:disabled { cursor: not-allowed; }
-
-    .btn-letra {
-      width: 28px;
-      height: 28px;
-      min-width: 28px;
-      background: rgba(255,255,255,0.25);
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      font-weight: 900;
-    }
-
-    /* ── FEEDBACK OVERLAY ─────────────────────────────────── */
-    .feedback-overlay {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s;
-    }
-
-    .feedback-overlay.visible {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    .feedback-overlay.correcto { background: rgba(29, 185, 84, 0.92); }
-    .feedback-overlay.incorrecto { background: rgba(229, 57, 53, 0.92); }
-    .feedback-overlay.tiempo { background: rgba(255, 109, 0, 0.92); }
-
-    .feedback-emoji { font-size: 72px; margin-bottom: 12px; animation: pop 0.3s ease-out both; }
-    .feedback-titulo { font-size: 32px; font-weight: 900; color: #fff; margin-bottom: 6px; }
-    .feedback-sub { font-size: 16px; color: rgba(255,255,255,0.9); text-align: center; padding: 0 24px; }
-    .feedback-puntos { font-size: 22px; font-weight: 800; color: #fff; margin-top: 10px;
-                       background: rgba(0,0,0,0.2); padding: 8px 20px; border-radius: 20px; }
-
-    @keyframes pop {
-      from { transform: scale(0.4); opacity: 0; }
-      to   { transform: scale(1);   opacity: 1; }
-    }
-
-    /* ── PANTALLA CARGANDO ────────────────────────────────── */
+    /* ── CARGA ───────────────────────────────────────────────── */
     .pantalla-carga {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      padding: 40px;
-      color: #6b7280;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 14px; padding: 48px 20px; color: #6b7280;
     }
-
     .spinner {
       width: 48px; height: 48px;
-      border: 5px solid #e5e7eb;
-      border-top-color: var(--azul);
-      border-radius: 50%;
-      animation: girar 0.8s linear infinite;
+      border: 5px solid #e5e7eb; border-top-color: var(--azul);
+      border-radius: 50%; animation: girar .8s linear infinite;
     }
-
     @keyframes girar { to { transform: rotate(360deg); } }
 
-    /* ── PANTALLA FINAL ───────────────────────────────────── */
-    .pantalla-final { display: none; }
+    /* ── META (contador / puntos) ────────────────────────────── */
+    .meta {
+      display: flex; justify-content: space-between;
+      align-items: center; font-size: 13px; font-weight: 600;
+      color: #6b7280; margin-bottom: 10px; flex-wrap: wrap; gap: 6px;
+    }
+    .puntos-badge {
+      background: var(--azul); color: var(--oro);
+      padding: 4px 14px; border-radius: 20px; font-size: 14px; font-weight: 800;
+    }
 
-    .final-score-wrap {
+    /* ── BARRA DE TIEMPO ─────────────────────────────────────── */
+    .barra-wrap {
+      width: 100%; height: 14px; background: #e5e7eb;
+      border-radius: 7px; overflow: hidden; margin-bottom: 18px; position: relative;
+    }
+    .barra-tiempo {
+      height: 100%; width: 100%; background: var(--verde);
+      border-radius: 7px; transition: width .1s linear, background-color .4s ease;
+    }
+    .barra-seg {
+      position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+      font-size: 10px; font-weight: 700; color: rgba(0,0,0,.45); pointer-events: none;
+    }
+
+    /* ── PREGUNTA ────────────────────────────────────────────── */
+    .txt-pregunta {
+      font-size: clamp(15px, 3.5vw, 21px); font-weight: 700;
+      color: var(--azul-dark); line-height: 1.4; text-align: center;
+      margin-bottom: 22px; min-height: 56px;
+    }
+
+    /* ── GRID OPCIONES ───────────────────────────────────────── */
+    .grid-opciones { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+    @media (max-width: 400px) { .grid-opciones { grid-template-columns: 1fr; } }
+
+    .btn-opcion {
+      display: flex; align-items: center; gap: 10px;
+      border: none; padding: 18px 14px; border-radius: var(--radio);
+      font-size: clamp(13px, 2.5vw, 15px); font-weight: 700; color: #fff;
+      cursor: pointer; transition: transform .15s, filter .15s;
+      box-shadow: 0 5px 0 rgba(0,0,0,.25); text-align: left;
+      word-break: break-word; line-height: 1.3;
+    }
+    .btn-opcion:nth-child(1) { background:#e53935; box-shadow:0 5px 0 #b71c1c; }
+    .btn-opcion:nth-child(2) { background:#1565c0; box-shadow:0 5px 0 #0d47a1; }
+    .btn-opcion:nth-child(3) { background:#f9a825; box-shadow:0 5px 0 #f57f17; color:#1a1a1a; }
+    .btn-opcion:nth-child(4) { background:#2e7d32; box-shadow:0 5px 0 #1b5e20; }
+    .btn-opcion:hover:not(:disabled) { transform:translateY(-3px); filter:brightness(1.1); }
+    .btn-opcion:active:not(:disabled) { transform:translateY(3px); box-shadow:0 1px 0 rgba(0,0,0,.25)!important; }
+    .btn-opcion:disabled { cursor:not-allowed; filter:brightness(.7); }
+
+    /* Estado correcto/incorrecto al revelar */
+    .btn-opcion.es-correcta  { outline: 4px solid #fff; filter: brightness(1.15); transform: scale(1.03); }
+    .btn-opcion.es-incorrecta{ opacity: .45; }
+
+    .btn-letra {
+      width: 28px; height: 28px; min-width: 28px;
+      background: rgba(255,255,255,.25); border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 900;
+    }
+
+    /* ── FEEDBACK OVERLAY ────────────────────────────────────── */
+    .feedback-overlay {
+      position: fixed; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; z-index: 100;
+      opacity: 0; pointer-events: none; transition: opacity .2s;
+    }
+    .feedback-overlay.visible { opacity: 1; pointer-events: all; }
+    .feedback-overlay.ok   { background: rgba(29,185,84,.92); }
+    .feedback-overlay.mal  { background: rgba(229,57,53,.92); }
+    .feedback-overlay.tick { background: rgba(255,109,0,.92); }
+
+    .fb-emoji  { font-size: 72px; margin-bottom: 10px; animation: pop .3s ease-out; }
+    .fb-titulo { font-size: 30px; font-weight: 900; color: #fff; margin-bottom: 6px; }
+    .fb-sub    { font-size: 15px; color: rgba(255,255,255,.9); text-align: center; padding: 0 24px; }
+    .fb-pts    { font-size: 22px; font-weight: 800; color: #fff; margin-top: 10px;
+                 background: rgba(0,0,0,.2); padding: 8px 20px; border-radius: 20px; }
+    @keyframes pop { from{transform:scale(.4);opacity:0} to{transform:scale(1);opacity:1} }
+
+    /* ── PANTALLA FINAL ──────────────────────────────────────── */
+    #pantalla-final { display: none; }
+
+    .score-wrap {
       background: linear-gradient(135deg, var(--azul-dark), var(--azul));
-      border-radius: 16px;
-      padding: 24px;
-      color: #fff;
-      margin: 16px 0 24px;
-      text-align: center;
+      border-radius: 16px; padding: 22px; color: #fff;
+      margin: 14px 0 22px; text-align: center;
+    }
+    .score-label { font-size: 13px; opacity: .8; margin-bottom: 4px; }
+    .score-num   { font-size: 54px; font-weight: 900; color: var(--oro); line-height: 1; }
+    .score-max   { font-size: 13px; opacity: .6; margin-top: 4px; }
+    .email-badge {
+      display: inline-block; background: #f3f4f6; border-radius: 20px;
+      padding: 6px 16px; font-size: 13px; color: var(--azul); font-weight: 600;
+      margin-bottom: 18px;
     }
 
-    .final-label { font-size: 14px; opacity: 0.8; margin-bottom: 4px; }
-    .final-score { font-size: 56px; font-weight: 900; color: var(--oro); line-height: 1; }
-    .final-max   { font-size: 13px; opacity: 0.6; margin-top: 4px; }
+    /* ── REVISIÓN ACADÉMICA ──────────────────────────────────── */
+    .rev-titulo { font-size: 17px; font-weight: 800; color: var(--azul-dark); margin-bottom: 4px; text-align: center; }
+    .rev-sub    { font-size: 12px; color: #6b7280; text-align: center; margin-bottom: 12px; }
+    .rev-wrap   { max-height: 360px; overflow-y: auto; border-radius: 10px; border: 1px solid #e5e7eb; }
 
-    .final-email-badge {
-      display: inline-block;
-      background: #f3f4f6;
-      border-radius: 20px;
-      padding: 6px 16px;
-      font-size: 13px;
-      color: var(--azul);
-      font-weight: 600;
-      margin-bottom: 20px;
+    .rev-tabla          { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .rev-tabla thead th {
+      background: var(--azul); color: #fff; padding: 9px 11px;
+      text-align: left; position: sticky; top: 0; z-index: 1;
     }
-
-    /* ── TABLA DE REVISIÓN ACADÉMICA ─────────────────────── */
-    .revision-titulo {
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--azul-dark);
-      margin-bottom: 6px;
-      text-align: center;
-    }
-
-    .revision-sub {
-      font-size: 12px;
-      color: #6b7280;
-      text-align: center;
-      margin-bottom: 14px;
-    }
-
-    .revision-wrap {
-      max-height: 380px;
-      overflow-y: auto;
-      border-radius: 10px;
-      border: 1px solid #e5e7eb;
-    }
-
-    .revision-tabla {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-
-    .revision-tabla thead th {
-      background: var(--azul);
-      color: #fff;
-      padding: 10px 12px;
-      text-align: left;
-      position: sticky;
-      top: 0;
-    }
-
-    .revision-tabla tbody tr { border-bottom: 1px solid #f3f4f6; }
-    .revision-tabla tbody tr:hover { background: #f9fafb; }
-    .revision-tabla td { padding: 10px 12px; vertical-align: top; line-height: 1.4; }
-
-    .td-num { color: #9ca3af; font-weight: 700; width: 28px; }
-
-    .chip-correcto  { background: #dcfce7; color: #166534; border-radius: 6px; padding: 2px 8px; font-weight: 700; font-size: 12px; }
-    .chip-incorrecto{ background: #fee2e2; color: #991b1b; border-radius: 6px; padding: 2px 8px; font-weight: 700; font-size: 12px; }
-    .chip-tiempo    { background: #fff7ed; color: #9a3412; border-radius: 6px; padding: 2px 8px; font-weight: 700; font-size: 12px; }
-
-    .td-correcta { color: #166534; font-weight: 600; }
+    .rev-tabla tbody tr  { border-bottom: 1px solid #f3f4f6; }
+    .rev-tabla tbody tr:hover { background: #f9fafb; }
+    .rev-tabla td        { padding: 9px 11px; vertical-align: top; line-height: 1.4; }
+    .td-num   { color: #9ca3af; font-weight: 700; width: 26px; }
+    .chip-ok  { background:#dcfce7; color:#166534; border-radius:6px; padding:2px 7px; font-weight:700; font-size:11px; }
+    .chip-mal { background:#fee2e2; color:#991b1b; border-radius:6px; padding:2px 7px; font-weight:700; font-size:11px; }
+    .chip-tck { background:#fff7ed; color:#9a3412; border-radius:6px; padding:2px 7px; font-weight:700; font-size:11px; }
+    .td-ok    { color:#166534; font-weight:600; }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="header-logo">CUN<span>-hoot</span></div>
-    <div class="header-info">
-      <span class="badge badge-email" id="badge-email">...</span>
-      <span class="badge" id="badge-nombre">Cargando...</span>
-    </div>
-  </header>
-
-  <div class="container">
-    <div class="card" id="card-juego">
-
-      <!-- Estado: cargando -->
-      <div class="pantalla-carga" id="pantalla-carga">
-        <div class="spinner"></div>
-        <span>Cargando pregunta...</span>
-      </div>
-
-      <!-- Estado: pregunta activa -->
-      <div id="pantalla-pregunta" style="display:none;">
-        <div class="meta">
-          <span id="txt-contador">Pregunta — de —</span>
-          <span class="puntos-badge" id="txt-puntos">0 pts</span>
-        </div>
-
-        <div class="barra-wrap">
-          <div class="barra-tiempo" id="barra-tiempo"></div>
-          <span class="barra-seg" id="seg-contador">10</span>
-        </div>
-
-        <p class="txt-pregunta" id="txt-pregunta">—</p>
-
-        <div class="grid-opciones" id="grid-opciones"></div>
-      </div>
-
-      <!-- Estado: pantalla final -->
-      <div class="pantalla-final" id="pantalla-final">
-        <h2 style="text-align:center; color:var(--azul-dark); margin-bottom:4px;">¡Reto Completado! 🎉</h2>
-        <div id="final-email-wrap" style="text-align:center; margin-top:8px;"></div>
-
-        <div class="final-score-wrap">
-          <div class="final-label">Tu puntaje final</div>
-          <div class="final-score" id="final-score">0</div>
-          <div class="final-max" id="final-max">de 2000 pts posibles</div>
-        </div>
-
-        <div class="revision-titulo">Revisión Académica</div>
-        <div class="revision-sub">Aprende de cada pregunta — la respuesta correcta está destacada.</div>
-
-        <div class="revision-wrap">
-          <table class="revision-tabla">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Pregunta</th>
-                <th>Tu respuesta</th>
-                <th>Correcta</th>
-              </tr>
-            </thead>
-            <tbody id="revision-body"></tbody>
-          </table>
-        </div>
-      </div>
-
-    </div>
+<header>
+  <div class="h-logo">CUN<span>-hoot</span></div>
+  <div class="h-info">
+    <span class="badge badge-email" id="badge-email">...</span>
+    <span class="badge" id="badge-nombre">Cargando...</span>
   </div>
+</header>
 
-  <!-- Feedback overlay (correcto / incorrecto / tiempo) -->
-  <div class="feedback-overlay" id="feedback-overlay">
-    <div class="feedback-emoji" id="feedback-emoji"></div>
-    <div class="feedback-titulo" id="feedback-titulo"></div>
-    <div class="feedback-sub"   id="feedback-sub"></div>
-    <div class="feedback-puntos" id="feedback-puntos" style="display:none;"></div>
-  </div>
+<div class="container">
+  <div class="card" id="card">
 
-  <script>
-    // ── CONFIGURACIÓN ─────────────────────────────────────
-    const SCRIPT_URL = 'https://script.google.com/a/macros/cun.edu.co/s/AKfycbwGL06rkbAkcbGxtrjVuRwAeiDoLF-kp1qcJRUK2yi_J51yJrXaJX2QsVrjSzTrSFqVHQ/exec';
-    const LETRAS     = ['A', 'B', 'C', 'D'];
+    <!-- Carga inicial -->
+    <div class="pantalla-carga" id="p-carga">
+      <div class="spinner"></div>
+      <span>Preparando el reto...</span>
+    </div>
 
-    // ── ESTADO ────────────────────────────────────────────
-    const params   = new URLSearchParams(window.location.search);
-    const token    = params.get('token')  || '';
-    const nombre   = decodeURIComponent(params.get('nombre') || 'Estudiante');
-    const emailURL = decodeURIComponent(params.get('email')  || '');
-    const TIEMPO_MAX = parseInt(params.get('tiempo') || '10');
+    <!-- Pregunta activa -->
+    <div id="p-pregunta" style="display:none;">
+      <div class="meta">
+        <span id="txt-contador">— de —</span>
+        <span class="puntos-badge" id="txt-puntos">0 pts</span>
+      </div>
+      <div class="barra-wrap">
+        <div class="barra-tiempo" id="barra"></div>
+        <span class="barra-seg" id="seg">10</span>
+      </div>
+      <p class="txt-pregunta" id="txt-pregunta">—</p>
+      <div class="grid-opciones" id="grid"></div>
+    </div>
 
-    let indice          = 0;
-    let puntaje         = 0;
-    let timerInterval   = null;
-    let tiempoRestante  = TIEMPO_MAX;
-    let bloqueado       = false;
-    let historial       = [];   // para la revisión académica
-    let totalPreguntas  = parseInt(params.get('total') || '20');
+    <!-- Pantalla final -->
+    <div id="pantalla-final">
+      <h2 style="text-align:center;color:var(--azul-dark);margin-bottom:4px;">¡Reto Completado! 🎉</h2>
+      <div id="final-email" style="text-align:center;margin-top:8px;"></div>
+      <div class="score-wrap">
+        <div class="score-label">Tu puntaje final</div>
+        <div class="score-num" id="score-num">0</div>
+        <div class="score-max" id="score-max">de 2000 pts posibles</div>
+      </div>
+      <div class="rev-titulo">Revisión Académica</div>
+      <div class="rev-sub">Analiza cada pregunta y refuerza los temas donde fallaste.</div>
+      <div class="rev-wrap">
+        <table class="rev-tabla">
+          <thead><tr><th>#</th><th>Pregunta</th><th>Tu respuesta</th><th>Respuesta correcta</th></tr></thead>
+          <tbody id="rev-body"></tbody>
+        </table>
+      </div>
+    </div>
 
-    // ── INIT ──────────────────────────────────────────────
-    document.getElementById('badge-nombre').textContent = nombre;
-    document.getElementById('badge-email').textContent  = emailURL || 'Autenticado';
+  </div><!-- /card -->
+</div>
 
-    window.addEventListener('load', () => cargarPregunta(0));
+<!-- Overlay de feedback -->
+<div class="feedback-overlay" id="overlay">
+  <div class="fb-emoji"  id="fb-emoji"></div>
+  <div class="fb-titulo" id="fb-titulo"></div>
+  <div class="fb-sub"    id="fb-sub"></div>
+  <div class="fb-pts"    id="fb-pts" style="display:none;"></div>
+</div>
 
-    // ── RED ───────────────────────────────────────────────
-    async function post(payload) {
-      const res = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify(payload)
-      });
-      return res.json();
+<script>
+  // ── PARÁMETROS DE URL ──────────────────────────────────────
+  const SCRIPT_URL = 'https://script.google.com/a/macros/cun.edu.co/s/AKfycbwGL06rkbAkcbGxtrjVuRwAeiDoLF-kp1qcJRUK2yi_J51yJrXaJX2QsVrjSzTrSFqVHQ/exec';
+  const LETRAS     = ['A','B','C','D'];
+  const p          = new URLSearchParams(location.search);
+  const TOKEN      = p.get('token')  || '';
+  const NOMBRE     = decodeURIComponent(p.get('nombre') || 'Estudiante');
+  const EMAIL      = decodeURIComponent(p.get('email')  || '');
+
+  document.getElementById('badge-nombre').textContent = NOMBRE;
+  document.getElementById('badge-email').textContent  = EMAIL || 'Autenticado';
+
+  // ── ESTADO DEL JUEGO ──────────────────────────────────────
+  let preguntas     = [];   // [{p, o}, ...]
+  let correctas     = [];   // array de índices (0-3) descifrados
+  let TIEMPO_MAX    = 10;
+  let indice        = 0;
+  let puntaje       = 0;
+  let timerInterval = null;
+  let tiempoRestante= TIEMPO_MAX;
+  let bloqueado     = false;
+  let respuestas    = [];   // respuestas del usuario (-1 = tiempo)
+  let tiempos       = [];   // segundos usados por pregunta
+  let historial     = [];   // para la revisión académica
+
+  // ── CIFRADO XOR (espejo del servidor) ─────────────────────
+  // Descifra el array de respuestas correctas recibido como hex.
+  function descifrarCorretas(enc, clave) {
+    const correctasArr = [];
+    for (let i = 0; i < enc.length; i += 2) {
+      const byte = parseInt(enc.substr(i, 2), 16);
+      correctasArr.push(byte ^ clave.charCodeAt((i / 2) % clave.length));
+    }
+    return correctasArr;
+  }
+
+  // ── INICIO: UNA SOLA LLAMADA AL SERVIDOR ──────────────────
+  async function iniciar() {
+    try {
+      const data = await post({ accion: 'iniciar', sessionToken: TOKEN });
+      if (!data.ok) { mostrarError(data.mensaje); return; }
+
+      preguntas  = data.preguntas;
+      correctas  = descifrarCorretas(data.enc, TOKEN);
+      TIEMPO_MAX = data.tiempo || 10;
+
+      mostrarPregunta(0);
+    } catch(e) {
+      mostrarError('Error de red al cargar el reto. Verifica tu conexión.');
+    }
+  }
+
+  // ── RENDERIZAR PREGUNTA (100% local, sin servidor) ─────────
+  function mostrarPregunta(idx) {
+    indice         = idx;
+    tiempoRestante = TIEMPO_MAX;
+    bloqueado      = false;
+
+    document.getElementById('txt-contador').textContent =
+      `Pregunta ${idx + 1} de ${preguntas.length}`;
+    document.getElementById('txt-puntos').textContent = `${puntaje} pts`;
+    document.getElementById('txt-pregunta').textContent = preguntas[idx].p;
+
+    const barra = document.getElementById('barra');
+    barra.style.width = '100%';
+    barra.style.backgroundColor = 'var(--verde)';
+    document.getElementById('seg').textContent = TIEMPO_MAX;
+
+    const grid = document.getElementById('grid');
+    grid.innerHTML = '';
+    preguntas[idx].o.forEach((op, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'btn-opcion';
+      btn.innerHTML = `<span class="btn-letra">${LETRAS[i]}</span>${op}`;
+      btn.dataset.idx = i;
+      btn.onclick = () => responder(i);
+      grid.appendChild(btn);
+    });
+
+    document.getElementById('p-carga').style.display    = 'none';
+    document.getElementById('p-pregunta').style.display = 'block';
+
+    iniciarTimer();
+  }
+
+  // ── TEMPORIZADOR LOCAL ─────────────────────────────────────
+  function iniciarTimer() {
+    clearInterval(timerInterval);
+    const barra = document.getElementById('barra');
+    const seg   = document.getElementById('seg');
+    timerInterval = setInterval(() => {
+      tiempoRestante = Math.max(0, +(tiempoRestante - 0.1).toFixed(1));
+      barra.style.width = (tiempoRestante / TIEMPO_MAX * 100) + '%';
+      seg.textContent   = Math.ceil(tiempoRestante);
+      if (tiempoRestante <= 3)      barra.style.backgroundColor = 'var(--rojo)';
+      else if (tiempoRestante <= 6) barra.style.backgroundColor = 'var(--naranja)';
+      if (tiempoRestante <= 0) { clearInterval(timerInterval); responder(-1); }
+    }, 100);
+  }
+
+  // ── RESPONDER (local, instantáneo) ────────────────────────
+  function responder(opcionIdx) {
+    if (bloqueado) return;
+    bloqueado = true;
+    clearInterval(timerInterval);
+
+    const segsUsados  = +(TIEMPO_MAX - Math.max(0, tiempoRestante)).toFixed(2);
+    const correcta    = correctas[indice];
+    const esCorrecta  = opcionIdx === correcta;
+    const tiempoAgot  = opcionIdx === -1;
+
+    respuestas.push(opcionIdx);
+    tiempos.push(segsUsados);
+
+    // Calcular puntos localmente (misma fórmula que el servidor)
+    let pts = 0;
+    if (esCorrecta) {
+      const tEf = Math.max(0, Math.min(segsUsados, TIEMPO_MAX));
+      pts = 50 + Math.round(((TIEMPO_MAX - tEf) / TIEMPO_MAX) * 50);
+      puntaje += pts;
     }
 
-    // ── CARGAR PREGUNTA ───────────────────────────────────
-    async function cargarPregunta(idx) {
-      mostrarCarga();
-      detenerTimer();
-      bloqueado = false;
+    // Revelar visualmente la correcta en los botones
+    document.querySelectorAll('.btn-opcion').forEach((btn, i) => {
+      btn.disabled = true;
+      if (i === correcta)                 btn.classList.add('es-correcta');
+      else if (i === opcionIdx && !esCorrecta) btn.classList.add('es-incorrecta');
+    });
 
-      try {
-        const data = await post({ accion: 'pregunta', sessionToken: token, indice: idx });
-        if (data.ok) {
-          totalPreguntas = data.total;
-          renderPregunta(data);
-          mostrarPregunta();
-          iniciarTimer();
+    historial.push({
+      pregunta:      preguntas[indice].p,
+      elegida:       tiempoAgot ? null : preguntas[indice].o[opcionIdx],
+      tiempoAgot,
+      esCorrecta,
+      textoCorrecta: preguntas[indice].o[correcta],
+      pts
+    });
+
+    mostrarFeedback(esCorrecta, tiempoAgot, preguntas[indice].o[correcta], pts)
+      .then(() => {
+        const siguiente = indice + 1;
+        if (siguiente >= preguntas.length) {
+          finalizarJuego();
         } else {
-          mostrarError(data.mensaje);
+          mostrarPregunta(siguiente);
         }
-      } catch (e) {
-        mostrarError('Error de red. Revisa tu conexión e intenta de nuevo.');
-      }
-    }
-
-    // ── RENDERIZAR PREGUNTA ───────────────────────────────
-    function renderPregunta(data) {
-      document.getElementById('txt-contador').textContent =
-        `Pregunta ${data.indice + 1} de ${data.total}`;
-      document.getElementById('txt-puntos').textContent = `${puntaje} pts`;
-      document.getElementById('txt-pregunta').textContent = data.pregunta;
-      document.getElementById('barra-tiempo').style.width = '100%';
-      document.getElementById('barra-tiempo').style.backgroundColor = 'var(--verde)';
-
-      const grid = document.getElementById('grid-opciones');
-      grid.innerHTML = '';
-      data.opciones.forEach((op, i) => {
-        const btn = document.createElement('button');
-        btn.className  = 'btn-opcion';
-        btn.innerHTML  = `<span class="btn-letra">${LETRAS[i]}</span>${op}`;
-        btn.onclick    = () => responder(i, op);
-        grid.appendChild(btn);
       });
-    }
+  }
 
-    // ── TEMPORIZADOR ──────────────────────────────────────
-    function iniciarTimer() {
-      tiempoRestante = TIEMPO_MAX;
-      const barra = document.getElementById('barra-tiempo');
-      const seg   = document.getElementById('seg-contador');
+  // ── FEEDBACK VISUAL (sin servidor) ────────────────────────
+  function mostrarFeedback(esCorrecta, tiempoAgot, textoCorrecta, pts) {
+    return new Promise(resolve => {
+      const ov = document.getElementById('overlay');
+      ov.className = 'feedback-overlay visible ' + (tiempoAgot ? 'tick' : esCorrecta ? 'ok' : 'mal');
 
-      timerInterval = setInterval(() => {
-        tiempoRestante = Math.max(0, tiempoRestante - 0.1);
-        const pct = (tiempoRestante / TIEMPO_MAX) * 100;
-        barra.style.width = pct + '%';
-        seg.textContent   = Math.ceil(tiempoRestante);
-
-        if (tiempoRestante <= 3)      barra.style.backgroundColor = 'var(--rojo)';
-        else if (tiempoRestante <= 6) barra.style.backgroundColor = 'var(--naranja)';
-
-        if (tiempoRestante <= 0) {
-          detenerTimer();
-          if (!bloqueado) responder(-1, null); // tiempo agotado
-        }
-      }, 100);
-    }
-
-    function detenerTimer() {
-      clearInterval(timerInterval);
-      timerInterval = null;
-    }
-
-    // ── RESPONDER ─────────────────────────────────────────
-    async function responder(opcionIdx, textoOpcion) {
-      if (bloqueado) return;
-      bloqueado = true;
-      detenerTimer();
-
-      const segundosUsados = parseFloat((TIEMPO_MAX - Math.max(0, tiempoRestante)).toFixed(2));
-
-      // Deshabilitar botones inmediatamente para evitar doble clic
-      document.querySelectorAll('.btn-opcion').forEach(b => b.disabled = true);
-
-      // Mostrar feedback de "enviando" si tarda más de 400ms
-      let feedbackTimer = setTimeout(() => mostrarFeedbackEnvio(), 400);
-
-      try {
-        const data = await post({
-          accion:       'responder',
-          sessionToken: token,
-          indice:       indice,
-          opcion:       opcionIdx,
-          tiempoUsado:  segundosUsados
-        });
-
-        clearTimeout(feedbackTimer);
-
-        if (!data.ok) { mostrarError(data.mensaje); return; }
-
-        puntaje = data.puntajeTotal;
-
-        // Guardar para revisión académica
-        historial.push({
-          pregunta:      document.getElementById('txt-pregunta').textContent,
-          elegida:       opcionIdx === -1 ? null : textoOpcion,
-          tiempoAgotado: opcionIdx === -1,
-          esCorrecta:    data.correcto,
-          textoCorrecta: data.textoCorrecta || '—',
-          puntos:        data.puntosGanados
-        });
-
-        // Mostrar feedback visual (correcto / incorrecto / tiempo)
-        await mostrarFeedback(data.correcto, opcionIdx === -1, data.textoCorrecta, data.puntosGanados);
-
-        indice++;
-
-        if (data.juegoTerminado) {
-          mostrarFinal();
-        } else {
-          await cargarPregunta(indice);
-        }
-
-      } catch (e) {
-        clearTimeout(feedbackTimer);
-        ocultarFeedback();
-        mostrarError('Fallo de red al enviar respuesta.');
-      }
-    }
-
-    // ── FEEDBACK OVERLAY ──────────────────────────────────
-    function mostrarFeedback(correcto, tiempoAgotado, textoCorrecta, puntos) {
-      return new Promise(resolve => {
-        const overlay  = document.getElementById('feedback-overlay');
-        const emoji    = document.getElementById('feedback-emoji');
-        const titulo   = document.getElementById('feedback-titulo');
-        const sub      = document.getElementById('feedback-sub');
-        const ptsEl    = document.getElementById('feedback-puntos');
-
-        overlay.className = 'feedback-overlay visible ';
-
-        if (tiempoAgotado) {
-          overlay.className += 'tiempo';
-          emoji.textContent  = '⏰';
-          titulo.textContent = '¡Tiempo!';
-          sub.textContent    = `La respuesta era: ${textoCorrecta}`;
-          ptsEl.style.display = 'none';
-        } else if (correcto) {
-          overlay.className += 'correcto';
-          emoji.textContent  = '✅';
-          titulo.textContent = '¡Correcto!';
-          sub.textContent    = textoCorrecta;
-          ptsEl.textContent  = `+${puntos} puntos`;
-          ptsEl.style.display = 'block';
-        } else {
-          overlay.className += 'incorrecto';
-          emoji.textContent  = '❌';
-          titulo.textContent = '¡Incorrecto!';
-          sub.textContent    = `La respuesta era: ${textoCorrecta}`;
-          ptsEl.style.display = 'none';
-        }
-
-        setTimeout(() => {
-          ocultarFeedback();
-          resolve();
-        }, 1400);
-      });
-    }
-
-    function mostrarFeedbackEnvio() {
-      const overlay = document.getElementById('feedback-overlay');
-      document.getElementById('feedback-emoji').textContent  = '⏳';
-      document.getElementById('feedback-titulo').textContent = 'Enviando...';
-      document.getElementById('feedback-sub').textContent    = '';
-      document.getElementById('feedback-puntos').style.display = 'none';
-      overlay.className = 'feedback-overlay visible tiempo';
-    }
-
-    function ocultarFeedback() {
-      document.getElementById('feedback-overlay').className = 'feedback-overlay';
-    }
-
-    // ── PANTALLA FINAL ────────────────────────────────────
-    function mostrarFinal() {
-      document.getElementById('pantalla-pregunta').style.display = 'none';
-      document.getElementById('pantalla-carga').style.display    = 'none';
-
-      const maxPts = totalPreguntas * 100;
-      document.getElementById('final-score').textContent = puntaje;
-      document.getElementById('final-max').textContent   = `de ${maxPts} pts posibles`;
-
-      if (emailURL) {
-        document.getElementById('final-email-wrap').innerHTML =
-          `<span class="final-email-badge">📧 ${emailURL}</span>`;
+      if (tiempoAgot) {
+        setFeedback('⏰','¡Tiempo!',`Correcta: ${textoCorrecta}`, null);
+      } else if (esCorrecta) {
+        setFeedback('✅','¡Correcto!', textoCorrecta, `+${pts} puntos`);
+      } else {
+        setFeedback('❌','¡Incorrecto!',`Correcta: ${textoCorrecta}`, null);
       }
 
-      // Construir tabla de revisión académica
-      const tbody = document.getElementById('revision-body');
-      tbody.innerHTML = '';
-      historial.forEach((item, i) => {
-        const tr  = document.createElement('tr');
-        let chip, tdElegida;
+      setTimeout(() => { ov.className = 'feedback-overlay'; resolve(); }, 1300);
+    });
+  }
 
-        if (item.tiempoAgotado) {
-          chip     = '<span class="chip-tiempo">Tiempo</span>';
-          tdElegida = `<td>${chip}</td>`;
-        } else if (item.esCorrecta) {
-          chip     = '<span class="chip-correcto">✓ Correcto</span>';
-          tdElegida = `<td>${chip}<br><small>${item.elegida}</small></td>`;
-        } else {
-          chip     = '<span class="chip-incorrecto">✗ Incorrecto</span>';
-          tdElegida = `<td>${chip}<br><small>${item.elegida || '—'}</small></td>`;
-        }
+  function setFeedback(emoji, titulo, sub, pts) {
+    document.getElementById('fb-emoji').textContent  = emoji;
+    document.getElementById('fb-titulo').textContent = titulo;
+    document.getElementById('fb-sub').textContent    = sub;
+    const ptsEl = document.getElementById('fb-pts');
+    if (pts) { ptsEl.textContent = pts; ptsEl.style.display = 'block'; }
+    else      { ptsEl.style.display = 'none'; }
+  }
 
-        tr.innerHTML = `
-          <td class="td-num">${i + 1}</td>
-          <td>${item.pregunta}</td>
-          ${tdElegida}
-          <td class="td-correcta">${item.textoCorrecta}</td>
-        `;
-        tbody.appendChild(tr);
+  // ── FINALIZAR: UNA SOLA LLAMADA AL SERVIDOR ───────────────
+  async function finalizarJuego() {
+    document.getElementById('p-pregunta').style.display  = 'none';
+    document.getElementById('p-carga').innerHTML =
+      '<div class="spinner"></div><span>Guardando resultado...</span>';
+    document.getElementById('p-carga').style.display = 'flex';
+
+    try {
+      const data = await post({
+        accion:       'guardar',
+        sessionToken:  TOKEN,
+        respuestas,
+        tiempos
       });
+      // Usar puntaje del servidor (fuente de verdad)
+      const pFinal = data.ok ? data.puntaje : puntaje;
+      mostrarFinal(pFinal, preguntas.length);
+    } catch(e) {
+      // Red fallida: mostrar igual pero avisar
+      mostrarFinal(puntaje, preguntas.length);
+      console.warn('No se pudo guardar en servidor:', e);
+    }
+  }
 
-      const pf = document.getElementById('pantalla-final');
-      pf.style.display = 'block';
-      pf.style.animation = 'aparecer 0.4s ease-out both';
+  function mostrarFinal(pFinal, total) {
+    document.getElementById('p-carga').style.display = 'none';
+
+    document.getElementById('score-num').textContent = pFinal;
+    document.getElementById('score-max').textContent = `de ${total * 100} pts posibles`;
+
+    if (EMAIL) {
+      document.getElementById('final-email').innerHTML =
+        `<span class="email-badge">📧 ${EMAIL}</span>`;
     }
 
-    // ── HELPERS DE VISTA ──────────────────────────────────
-    function mostrarCarga() {
-      document.getElementById('pantalla-carga').style.display    = 'flex';
-      document.getElementById('pantalla-pregunta').style.display = 'none';
-    }
+    const tbody = document.getElementById('rev-body');
+    tbody.innerHTML = '';
+    historial.forEach((item, i) => {
+      const tr = document.createElement('tr');
+      let chip, tdEleg;
+      if (item.tiempoAgot) {
+        chip    = '<span class="chip-tck">⏰ Tiempo</span>';
+        tdEleg  = `<td>${chip}</td>`;
+      } else if (item.esCorrecta) {
+        chip    = '<span class="chip-ok">✓ Correcto</span>';
+        tdEleg  = `<td>${chip}<br><small>${item.elegida}</small></td>`;
+      } else {
+        chip    = '<span class="chip-mal">✗ Incorrecto</span>';
+        tdEleg  = `<td>${chip}<br><small>${item.elegida || '—'}</small></td>`;
+      }
+      tr.innerHTML =
+        `<td class="td-num">${i+1}</td>` +
+        `<td>${item.pregunta}</td>` +
+        `${tdEleg}` +
+        `<td class="td-ok">${item.textoCorrecta}</td>`;
+      tbody.appendChild(tr);
+    });
 
-    function mostrarPregunta() {
-      document.getElementById('pantalla-carga').style.display    = 'none';
-      document.getElementById('pantalla-pregunta').style.display = 'block';
-    }
+    const pf = document.getElementById('pantalla-final');
+    pf.style.display = 'block';
+    pf.style.animation = 'aparecer .4s ease-out both';
+  }
 
-    function mostrarError(msg) {
-      document.getElementById('pantalla-carga').innerHTML =
-        `<div style="text-align:center;color:#b91c1c;padding:20px;">
-          <div style="font-size:40px;margin-bottom:12px;">⚠️</div>
-          <strong>Error</strong><br><span style="font-size:13px;">${msg}</span>
-        </div>`;
-      document.getElementById('pantalla-carga').style.display = 'flex';
-      document.getElementById('pantalla-pregunta').style.display = 'none';
-    }
-  </script>
+  // ── HELPERS ───────────────────────────────────────────────
+  async function post(payload) {
+    const res = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(payload)
+    });
+    return res.json();
+  }
+
+  function mostrarError(msg) {
+    document.getElementById('p-carga').innerHTML =
+      `<div style="text-align:center;color:#b91c1c;padding:20px;">
+        <div style="font-size:40px;margin-bottom:10px;">⚠️</div>
+        <strong>Error</strong><br><span style="font-size:13px;">${msg}</span>
+      </div>`;
+    document.getElementById('p-carga').style.display = 'flex';
+  }
+
+  // ── ARRANQUE ──────────────────────────────────────────────
+  window.addEventListener('load', iniciar);
+</script>
 </body>
 </html>
