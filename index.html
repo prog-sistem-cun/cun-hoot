@@ -3,326 +3,291 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CUN-hoot | Semana C</title>
+  <title>CUN-hoot | Reto Semana C</title>
   <style>
-    /* Variables de color institucionales y de Kahoot */
     :root {
-      --cun-blue: #002b5c;
-      --cun-gold: #d89e00;
-      --bg-color: #f0f2f5;
-      --k-red: #e21b3c;
-      --k-blue: #1368ce;
-      --k-yellow: #d89e00;
-      --k-green: #26890c;
+      --cun-blue:  #002b5c;
+      --cun-gold:  #d89e00;
+      --cun-light: #e8f0fe;
+      --gris-txt:  #4b5563;
+      --radio:     16px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    body { 
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
-      background-color: var(--bg-color); 
-      color: #333;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      padding: 15px;
+      padding: 20px;
+      background: linear-gradient(145deg, #001a3a 0%, #002b5c 55%, #003d82 100%);
     }
 
-    .contenedor { 
+    /* ── TARJETA ────────────────────────────────────────────── */
+    .tarjeta {
       width: 100%;
-      max-width: 500px; 
-      background: white; 
-      padding: 30px; 
-      border-radius: 16px; 
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1); 
+      max-width: 440px;
+      background: #ffffff;
+      border-radius: var(--radio);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      padding: 36px 32px 30px;
       text-align: center;
-      transition: all 0.3s ease;
+      animation: entrar 0.4s ease-out both;
     }
 
-    h1, h2 { color: var(--cun-blue); margin-bottom: 15px; }
-
-    /* Estilos del Formulario */
-    .form-group { margin-bottom: 15px; text-align: left; }
-    .form-group label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px; color: #555; }
-    input { 
-      width: 100%; padding: 12px; font-size: 16px; 
-      border: 2px solid #e1e1e1; border-radius: 8px; 
-      outline: none; transition: border-color 0.2s;
+    @keyframes entrar {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0);    }
     }
-    input:focus { border-color: var(--cun-blue); }
 
-    /* Código QR */
-    .qr-container { margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 12px; }
-    #qr-img { width: 150px; height: 150px; border-radius: 8px; }
-
-    /* Botones */
-    .btn { 
-      width: 100%; padding: 16px; font-size: 18px; font-weight: bold; 
-      color: white; border: none; border-radius: 8px; cursor: pointer; 
-      transition: transform 0.1s, filter 0.2s; 
-      box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+    /* ── CABECERA ───────────────────────────────────────────── */
+    .logo-banda {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--cun-blue);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
     }
-    .btn:active { transform: translateY(4px); box-shadow: 0 0 0 rgba(0,0,0,0); }
-    .btn-inicio { background-color: var(--cun-blue); margin-top: 10px; }
+    .logo-banda span { color: var(--cun-gold); }
 
-    /* Grid de Opciones */
-    .grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
-    @media (min-width: 400px) { .grid { grid-template-columns: 1fr 1fr; } }
-    .color-0 { background: var(--k-red); } .color-1 { background: var(--k-blue); } 
-    .color-2 { background: var(--k-yellow); } .color-3 { background: var(--k-green); }
+    .titulo {
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--cun-blue);
+      letter-spacing: -0.5px;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .titulo em { font-style: normal; color: var(--cun-gold); }
 
-    /* --- ESTILOS DEL TEMPORIZADOR CIRCULAR --- */
-    .timer-container-center {
+    .subtitulo {
+      font-size: 14px;
+      color: var(--gris-txt);
+      margin-bottom: 22px;
+    }
+
+    /* ── DIVISOR ────────────────────────────────────────────── */
+    .divisor { height: 1px; background: #e5e7eb; margin: 20px 0; }
+
+    /* ── REGLAS ─────────────────────────────────────────────── */
+    .reglas {
+      list-style: none;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
+      text-align: left;
       margin-bottom: 20px;
     }
 
-    .timer-wrapper {
-      position: relative;
-      width: 80px; 
-      height: 80px;
+    .reglas li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13.5px;
+      color: var(--gris-txt);
+      line-height: 1.45;
     }
 
-    .timer-svg {
-      transform: rotate(-90deg);
+    .regla-icono {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .ri-azul   { background: #dbeafe; }
+    .ri-rojo   { background: #fee2e2; }
+    .ri-verde  { background: #dcfce7; }
+    .ri-oro    { background: #fef9c3; }
+    .ri-mora   { background: #ede9fe; }
+
+    /* ── QR ─────────────────────────────────────────────────── */
+    .qr-bloque {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 14px;
+      text-align: left;
+      margin-bottom: 22px;
+    }
+
+    #qr-img {
+      width: 76px;
+      height: 76px;
+      border-radius: 8px;
+      background: #e5e7eb;
+      flex-shrink: 0;
+    }
+
+    .qr-txt { font-size: 12px; color: var(--gris-txt); line-height: 1.5; }
+    .qr-txt strong { display: block; font-size: 13px; color: #111827; margin-bottom: 3px; }
+
+    /* ── BOTÓN PRINCIPAL ────────────────────────────────────── */
+    .btn-entrar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
       width: 100%;
-      height: 100%;
+      padding: 16px 20px;
+      background: var(--cun-blue);
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 5px 0 rgba(0, 0, 0, 0.2);
+      transition: filter 0.2s, transform 0.1s, box-shadow 0.1s;
+      margin-bottom: 14px;
     }
 
-    .timer-bg {
-      fill: none;
-      stroke: #e1e1e1;
-      stroke-width: 8;
+    .btn-entrar:hover  { filter: brightness(1.15); }
+    .btn-entrar:active {
+      transform: translateY(4px);
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
     }
 
-    .timer-path {
-      fill: none;
-      stroke-width: 8;
-      stroke-linecap: round;
-      stroke-dasharray: 283;
-      stroke-dashoffset: 0;
-      transition: stroke-dashoffset 1s linear, stroke 0.3s ease;
+    .btn-entrar .google-logo {
+      width: 22px;
+      height: 22px;
+      background: white;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
     }
 
-    .timer-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 24px;
-      font-weight: bold;
-      color: #333;
+    /* SVG del logo de Google */
+    .google-logo svg { width: 16px; height: 16px; }
+
+    /* ── AVISO DOMINIO ──────────────────────────────────────── */
+    .aviso {
+      font-size: 12px;
+      color: var(--gris-txt);
+      padding: 9px 13px;
+      background: var(--cun-light);
+      border-radius: 8px;
+      border-left: 3px solid var(--cun-blue);
+      text-align: left;
+      line-height: 1.5;
     }
+    .aviso strong { color: var(--cun-blue); }
 
-    .color-seguro { stroke: var(--k-green); }    
-    .color-alerta { stroke: var(--k-yellow); }    
-    .color-peligro { stroke: var(--k-red); }   
-
-    /* Estado superior del juego */
-    .stats { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 15px; color: #666; font-size: 14px; }
-    
-    .oculto { display: none !important; }
+    /* ── PIE ────────────────────────────────────────────────── */
+    .pie {
+      margin-top: 18px;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.4);
+    }
   </style>
 </head>
 <body>
 
-  <div class="contenedor" id="pantalla-inicio">
-    <h1>🚀 Reto Semana C</h1>
-    
-    <div class="qr-container">
-      <p style="font-size: 12px; margin-bottom: 10px; color: #666;">Escanea para jugar desde tu móvil</p>
-      <img id="qr-img" src="" alt="Código QR del Juego">
-    </div>
+  <div class="tarjeta">
 
-    <div class="form-group">
-      <label for="id-jugador">Número de Identificación</label>
-      <input type="number" id="id-jugador" placeholder="Ej. 1002345678" required>
-    </div>
-    <div class="form-group">
-      <label for="nombre-jugador">Nombre Completo</label>
-      <input type="text" id="nombre-jugador" placeholder="Ej. Juan Pérez" required>
-    </div>
+    <div class="logo-banda">CUN &nbsp;<span>●</span>&nbsp; Ingeniería de Sistemas</div>
 
-    <button class="btn btn-inicio" onclick="iniciarJuego()">ENTRAR AL RETO</button>
-  </div>
+    <h1 class="titulo">CUN<em>-hoot</em></h1>
+    <p class="subtitulo">El más rápido y certero gana. ¿Estás listo?</p>
 
-  <div class="contenedor oculto" id="pantalla-juego">
-    <div class="stats">
-      <span id="contador-preguntas">Pregunta 1/X</span>
-      <span>Sys-Points: <span id="puntos">0</span></span>
-    </div>
-    
-    <div class="timer-container-center">
-      <div class="timer-wrapper">
-        <svg class="timer-svg" viewBox="0 0 100 100">
-          <circle class="timer-bg" cx="50" cy="50" r="45"></circle>
-          <circle class="timer-path color-seguro" id="timer-path" cx="50" cy="50" r="45"></circle>
-        </svg>
-        <span class="timer-text" id="timer-text">30</span>
+    <div class="divisor"></div>
+
+    <ul class="reglas">
+      <li>
+        <div class="regla-icono ri-azul">📋</div>
+        <span><strong>20 preguntas</strong> de informática, redes, programación y circuitos</span>
+      </li>
+      <li>
+        <div class="regla-icono ri-rojo">⏱</div>
+        <span><strong>10 segundos</strong> por pregunta — responder rápido da más puntos</span>
+      </li>
+      <li>
+        <div class="regla-icono ri-mora">🔐</div>
+        <span>Acceso exclusivo con tu cuenta <strong>@cun.edu.co</strong> — no aplican cuentas personales</span>
+      </li>
+      <li>
+        <div class="regla-icono ri-verde">🎯</div>
+        <span><strong>Un solo intento</strong> por correo institucional en todo el evento</span>
+      </li>
+      <li>
+        <div class="regla-icono ri-oro">🏆</div>
+        <span>El ganador se anuncia al finalizar la validación anti-trampa</span>
+      </li>
+    </ul>
+
+    <div class="divisor"></div>
+
+    <div class="qr-bloque">
+      <img id="qr-img" src="" alt="Código QR para móvil">
+      <div class="qr-txt">
+        <strong>Juega desde tu celular</strong>
+        Escanea el QR para abrir el reto en tu móvil sin escribir la URL.
       </div>
     </div>
 
-    <h2 id="texto-pregunta" style="min-height: 60px; font-size: 20px;">Cargando...</h2>
-    
-    <div id="opciones" class="grid"></div>
+    <!--
+      INSTRUCCIÓN: reemplaza el href con la URL de tu App Script desplegada.
+      La encuentras en Apps Script → Implementar → Administrar implementaciones → URL.
+    -->
+    <a
+      class="btn-entrar"
+      id="btn-entrar"
+      href="https://script.google.com/a/macros/cun.edu.co/s/AKfycbwGL06rkbAkcbGxtrjVuRwAeiDoLF-kp1qcJRUK2yi_J51yJrXaJX2QsVrjSzTrSFqVHQ/exec"
+      target="_self"
+    >
+      <div class="google-logo">
+        <!-- Logo de Google en SVG (sin fuentes externas) -->
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+      </div>
+      Entrar con tu cuenta CUN
+    </a>
+
+    <p class="aviso">
+      Al hacer clic serás redirigido a Google para autenticarte con tu cuenta
+      <strong>@cun.edu.co</strong>. Después de verificar tu acceso, el reto
+      iniciará automáticamente.
+    </p>
+
   </div>
 
-  <div class="contenedor oculto" id="pantalla-final">
-    <h2>¡Reto Completado! 🏆</h2>
-    <p style="font-size: 40px; font-weight: bold; color: var(--cun-blue); margin: 20px 0;" id="mensaje-final"></p>
-    <p>Sys-Points Obtenidos</p>
-    <div id="estado-guardado" style="margin-top: 20px; padding: 15px; border-radius: 8px; font-weight: bold; background: #f8f9fa;">
-      Sincronizando con la Sede G...
-    </div>
-  </div>
+  <p class="pie">CUN-hoot v1.0 &nbsp;·&nbsp; Nivel Básico &nbsp;·&nbsp; Semana C &nbsp;·&nbsp; 2026</p>
 
-  <script src="preguntas.js"></script>
-  
   <script>
-    // --- CONFIGURACIÓN ---
-    const API_URL = "https://script.google.com/macros/s/AKfycbyeyQAz_CQuuCMwCTPGTTiEOthWTDhcEK1AuOvYfJbGC50NaiQ8OTJcf4jbnd3walbghw/exec";
-    const TIEMPO_POR_PREGUNTA = 30; // 30 segundos
-    const CIRCUNFERENCIA = 283; // Perímetro del círculo SVG
-    
-    let identificacion = "";
-    let nombre = "";
-    let indice = 0;
-    let puntaje = 0;
-    let tiempoRestante = 0;
-    let timerInterval = null;
+    // ── QR dinámico apuntando a la URL del Apps Script ───────────
+    // (para que al escanear el móvil vaya directo al login de Google)
+    const APPSCRIPT_URL = document.getElementById("btn-entrar").href;
 
-    // Generar QR dinámico al cargar la página
-    window.onload = () => {
-      const urlActual = encodeURIComponent(window.location.href);
-      document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${urlActual}`;
-    };
-
-    function iniciarJuego() {
-      identificacion = document.getElementById('id-jugador').value;
-      nombre = document.getElementById('nombre-jugador').value;
-      
-      if(identificacion.trim() === "" || nombre.trim() === "") { 
-        alert("Por favor, completa ambos campos para registrar tus puntos."); 
-        return; 
-      }
-      
-      document.getElementById('pantalla-inicio').classList.add('oculto');
-      document.getElementById('pantalla-juego').classList.remove('oculto');
-      mostrarPregunta();
-    }
-
-    function mostrarPregunta() {
-      if(indice >= preguntasPrimerSemestre.length) {
-        finalizarJuego();
-        return;
-      }
-      
-      const p = preguntasPrimerSemestre[indice];
-      document.getElementById('texto-pregunta').innerText = p.pregunta;
-      document.getElementById('contador-preguntas').innerText = `Pregunta ${indice + 1}/${preguntasPrimerSemestre.length}`;
-      
-      let html = "";
-      p.opciones.forEach((opcion, i) => {
-        html += `<button class="btn color-${i}" onclick="verificar(${i}, ${p.correcta})">${opcion}</button>`;
-      });
-      document.getElementById('opciones').innerHTML = html;
-
-      iniciarTemporizador();
-    }
-
-    function iniciarTemporizador() {
-      clearInterval(timerInterval);
-      tiempoRestante = TIEMPO_POR_PREGUNTA;
-      
-      // Estado inicial visual
-      document.getElementById("timer-text").innerText = tiempoRestante;
-      actualizarAnillo(tiempoRestante);
-      actualizarColor(tiempoRestante);
-
-      timerInterval = setInterval(() => {
-        tiempoRestante--;
-        
-        document.getElementById("timer-text").innerText = tiempoRestante;
-        actualizarAnillo(tiempoRestante);
-        actualizarColor(tiempoRestante);
-
-        if(tiempoRestante <= 0) {
-          clearInterval(timerInterval);
-          indice++;
-          mostrarPregunta();
-        }
-      }, 1000);
-    }
-
-    function actualizarAnillo(tiempo) {
-      const fraccion = tiempo / TIEMPO_POR_PREGUNTA;
-      const desplazamiento = CIRCUNFERENCIA - (fraccion * CIRCUNFERENCIA);
-      document.getElementById("timer-path").style.strokeDashoffset = desplazamiento;
-    }
-
-    function actualizarColor(tiempo) {
-      const path = document.getElementById("timer-path");
-      path.classList.remove("color-seguro", "color-alerta", "color-peligro");
-      
-      if (tiempo > 15) {
-        path.classList.add("color-seguro");
-      } else if (tiempo > 5) {
-        path.classList.add("color-alerta");
-      } else {
-        path.classList.add("color-peligro");
-      }
-    }
-
-    function verificar(seleccionada, correcta) {
-      clearInterval(timerInterval); 
-      
-      if(seleccionada === correcta) {
-        const puntosBase = 50;
-        const bonoVelocidad = Math.round((tiempoRestante / TIEMPO_POR_PREGUNTA) * 50);
-        puntaje += (puntosBase + bonoVelocidad);
-        document.getElementById('puntos').innerText = puntaje;
-      }
-      
-      indice++;
-      mostrarPregunta();
-    }
-
-    function finalizarJuego() {
-      clearInterval(timerInterval);
-      document.getElementById('pantalla-juego').classList.add('oculto');
-      document.getElementById('pantalla-final').classList.remove('oculto');
-      document.getElementById('mensaje-final').innerText = puntaje;
-      
-      enviarPuntaje();
-    }
-
-    function enviarPuntaje() {
-      fetch(API_URL, {
-        method: 'POST',
-        body: JSON.stringify({
-          identificacion: identificacion,
-          nombre: nombre,
-          semestre: "1er Semestre",
-          puntaje: puntaje
-        }),
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
-      })
-      .then(response => response.json())
-      .then(data => {
-        const estado = document.getElementById('estado-guardado');
-        estado.innerText = "✅ ¡Registro exitoso! Puntos asegurados.";
-        estado.style.background = "#d4edda";
-        estado.style.color = "#155724";
-      })
-      .catch(error => {
-        const estado = document.getElementById('estado-guardado');
-        estado.innerText = "⚠️ Error de red. Por favor toma captura de tu puntaje y envíala a tu docente.";
-        estado.style.background = "#f8d7da";
-        estado.style.color = "#721c24";
-      });
-    }
+    window.addEventListener("load", () => {
+      const urlQR = encodeURIComponent(APPSCRIPT_URL);
+      document.getElementById("qr-img").src =
+        "https://api.qrserver.com/v1/create-qr-code/?size=152x152&data=" + urlQR;
+    });
   </script>
 </body>
 </html>
