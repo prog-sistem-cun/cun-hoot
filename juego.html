@@ -5,338 +5,321 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CUN-hoot | Reto en Vivo</title>
   <style>
+    /* VARIABLES DE COLOR MÁS LLAMATIVAS */
     :root {
-      --cun-blue:  #002b5c;
-      --cun-gold:  #d89e00;
-      --cun-light: #f3f7fe;
+      --cun-blue:  #003d82;
+      --cun-blue-dark: #001a3a;
+      --cun-gold:  #ffc107;
+      --cun-gold-hover: #ffca2c;
+      --cun-light: #f4f7f6;
       --success:   #28a745;
+      --warning:   #ff9800;
       --danger:    #dc3545;
-      --radio:     12px;
+      --radio:     16px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--cun-light);
+      background: linear-gradient(135deg, var(--cun-blue-dark) 0%, var(--cun-blue) 100%);
       color: #333;
       display: flex;
       flex-direction: column;
       min-height: 100vh;
     }
 
-    /* ── HEADER ── */
     header {
-      background: var(--cun-blue);
+      background: rgba(0,0,0,0.2);
       color: white;
-      padding: 1rem;
+      padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      backdrop-filter: blur(10px);
     }
 
-    .timer-container {
-      background: rgba(255,255,255,0.1);
-      padding: 8px 15px;
-      border-radius: 20px;
-      font-weight: bold;
-      font-size: 1.2rem;
-      border: 2px solid var(--cun-gold);
-    }
-
-    /* ── CONTENEDOR JUEGO ── */
-    main {
+    .container {
       flex: 1;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       padding: 20px;
-      max-width: 800px;
-      margin: 0 auto;
-      width: 100%;
     }
 
-    #pantalla-carga { text-align: center; }
-    
-    .pregunta-card {
+    .card {
       background: white;
-      width: 100%;
-      padding: 30px;
       border-radius: var(--radio);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-      margin-bottom: 20px;
-      animation: fadeIn 0.5s ease;
-    }
-
-    .pregunta-texto {
-      font-size: 1.4rem;
-      font-weight: 600;
-      margin-bottom: 25px;
-      color: var(--cun-blue);
-    }
-
-    .opciones-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
       width: 100%;
+      max-width: 600px;
+      padding: 30px;
+      text-align: center;
+      transition: transform 0.3s ease;
     }
 
-    @media (max-width: 600px) {
-      .opciones-grid { grid-template-columns: 1fr; }
+    /* BARRA DE TIEMPO VISUAL */
+    .timer-container {
+      width: 100%;
+      height: 12px;
+      background: #e0e0e0;
+      border-radius: 6px;
+      margin: 20px 0;
+      overflow: hidden;
+    }
+    .timer-bar {
+      height: 100%;
+      width: 100%;
+      background: var(--success);
+      transition: width 0.1s linear, background-color 0.3s ease;
+    }
+
+    h2 { color: var(--cun-blue-dark); font-size: 24px; margin-bottom: 20px; }
+
+    /* RESPONSIVE GRID PARA BOTONES */
+    .grid-opciones {
+      display: grid;
+      grid-template-columns: 1fr; /* Mobile por defecto */
+      gap: 15px;
+      margin-top: 20px;
+    }
+    @media (min-width: 480px) {
+      .grid-opciones { grid-template-columns: 1fr 1fr; } /* Desktop 2 columnas */
     }
 
     .btn-opcion {
-      background: white;
-      border: 2px solid #e0e0e0;
-      padding: 15px;
-      border-radius: var(--radio);
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-align: left;
-      display: flex;
-      align-items: center;
-    }
-
-    .btn-opcion:hover {
-      border-color: var(--cun-gold);
-      background: #fffdf5;
-      transform: translateY(-2px);
-    }
-
-    .btn-opcion:active { transform: translateY(0); }
-
-    /* ── BARRA DE PROGRESO ── */
-    .progreso-container {
-      width: 100%;
-      background: #ddd;
-      height: 8px;
-      border-radius: 4px;
-      margin-top: 20px;
-      overflow: hidden;
-    }
-    .progreso-barra {
-      background: var(--cun-gold);
-      height: 100%;
-      width: 0%;
-      transition: width 0.3s;
-    }
-
-    /* ── RESULTADOS ── */
-    #pantalla-final {
-      display: none;
-      text-align: center;
-      background: white;
-      padding: 40px;
-      border-radius: var(--radio);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    }
-
-    .score-grande {
-      font-size: 4rem;
-      color: var(--cun-gold);
+      background: var(--cun-blue);
+      color: white;
+      border: none;
+      padding: 20px;
+      border-radius: 12px;
+      font-size: 16px;
       font-weight: bold;
-      margin: 20px 0;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .btn-opcion:hover {
+      background: var(--cun-gold);
+      color: var(--cun-blue-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(255, 193, 7, 0.4);
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+    /* ESTILOS PARA LA REVISIÓN ACADÉMICA */
+    .review-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 14px;
+      text-align: left;
     }
-
-    .spinner {
-      border: 4px solid rgba(0,0,0,0.1);
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      border-left-color: var(--cun-blue);
-      animation: spin 1s linear infinite;
-      display: inline-block;
+    .review-table th, .review-table td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
     }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .review-table th { background-color: var(--cun-light); }
+    .correct { color: var(--success); font-weight: bold; }
+    .incorrect { color: var(--danger); font-weight: bold; }
   </style>
 </head>
 <body>
 
-<header>
-  <div class="user-info">
-    <strong id="student-name">Estudiante CUN</strong><br>
-    <small id="question-count">Pregunta 0 de 20</small>
-  </div>
-  <div class="timer-container" id="timer">00:00</div>
-</header>
+  <header>
+    <div style="font-weight:bold; font-size: 18px;">CUN <span style="color:var(--cun-gold)">●</span> Ingeniería</div>
+    <div id="student-name">Cargando...</div>
+  </header>
 
-<main>
-  <div id="pantalla-carga">
-    <div class="spinner"></div>
-    <p style="margin-top:15px">Preparando tu cuestionario...</p>
-  </div>
+  <div class="container">
+    <div class="card" id="juego-container" style="display: none;">
+      <div style="display: flex; justify-content: space-between; font-size: 14px; color: #666;">
+        <span id="question-count">Pregunta -- de --</span>
+        <span id="puntaje-actual">Puntos: 0</span>
+      </div>
+      
+      <div class="timer-container">
+        <div class="timer-bar" id="barra-tiempo"></div>
+      </div>
 
-  <div id="juego-container" style="display:none; width: 100%;">
-    <div class="pregunta-card">
-      <div class="pregunta-texto" id="txt-pregunta">Cargando pregunta...</div>
-      <div class="opciones-grid" id="grid-opciones">
+      <h2 id="txt-pregunta">Cargando pregunta...</h2>
+      
+      <div class="grid-opciones" id="grid-opciones">
         </div>
     </div>
-    <div class="progreso-container">
-      <div class="progreso-barra" id="barra-progreso"></div>
+
+    <div class="card" id="pantalla-final" style="display: none;">
+      <h2>¡Reto Completado! 🎉</h2>
+      <p style="font-size: 18px;">Tu puntaje final es:</p>
+      <div style="font-size: 48px; font-weight: bold; color: var(--cun-gold); margin: 10px 0;" id="final-score">0</div>
+      
+      <h3 style="margin-top: 30px; color: var(--cun-blue);">Revisión Académica</h3>
+      <p style="font-size: 13px; color: #666;">Aprende de tus resultados:</p>
+      <div style="max-height: 300px; overflow-y: auto;">
+        <table class="review-table">
+          <thead>
+            <tr>
+              <th>Pregunta</th>
+              <th>Tu Respuesta</th>
+              <th>Respuesta Correcta</th>
+            </tr>
+          </thead>
+          <tbody id="review-body">
+            </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
-  <div id="pantalla-final">
-    <h1>¡Reto Finalizado!</h1>
-    <p>Tu puntaje total es:</p>
-    <div class="score-grande" id="final-score">0</div>
-    <p id="mensaje-final">Gracias por participar en la Semana C.</p>
-    <button onclick="location.href='index.html'" style="margin-top:20px; padding:10px 20px; cursor:pointer; background:var(--cun-blue); color:white; border:none; border-radius:5px;">Volver al inicio</button>
-  </div>
-</main>
-
-<script>
-  // CONFIGURACIÓN
-  const SCRIPT_URL = 'https://script.google.com/a/macros/cun.edu.co/s/AKfycbwGL06rkbAkcbGxtrjVuRwAeiDoLF-kp1qcJRUK2yi_J51yJrXaJX2QsVrjSzTrSFqVHQ/exec';
-  
-  // ESTADO DEL JUEGO
-  let indiceActual = 0;
-  let puntajeAcumulado = 0;
-  let tiempoTotal = 0;
-  let timerInterval;
-  let inicioPreguntaMs = 0; // Para calcular los segundos que tarda en responder
-  
-  const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get('token');
-  const nombreEstudiante = urlParams.get('nombre') || 'Estudiante CUN';
-
-  // Inicialización
-  window.onload = async () => {
-    if (!token) {
-      alert("Acceso no autorizado. Regresa al inicio.");
-      window.location.href = "index.html";
-      return;
-    }
+  <script>
+    // CONFIGURACIÓN
+    const SCRIPT_URL = 'https://script.google.com/a/macros/cun.edu.co/s/AKfycbwGL06rkbAkcbGxtrjVuRwAeiDoLF-kp1qcJRUK2yi_J51yJrXaJX2QsVrjSzTrSFqVHQ/exec';
+    const TIEMPO_MAX = 10; // Segundos por pregunta
     
-    document.getElementById('student-name').innerText = decodeURIComponent(nombreEstudiante);
-    iniciarTimer();
-    await solicitarPregunta(0);
-  };
+    // ESTADO
+    let indiceActual = 0;
+    let puntajeAcumulado = 0;
+    let timerInterval;
+    let tiempoRestante = TIEMPO_MAX;
+    let preguntaActualTexto = "";
+    let historialRevision = []; // Guarda datos para la revisión académica
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    const nombreEstudiante = urlParams.get('nombre') || 'Estudiante CUN';
 
-  // ─── EL TRUCO PARA EVITAR CORS EN APPS SCRIPT ───
-  // Enviar como POST puro (sin headers de JSON) evita el preflight OPTIONS
-  async function peticionServidor(payload) {
-    const res = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify(payload)
-    });
-    return await res.json();
-  }
+    window.onload = async () => {
+      document.getElementById('student-name').innerText = decodeURIComponent(nombreEstudiante);
+      await solicitarPregunta(0);
+    };
 
-  // ─── LÓGICA DEL JUEGO ───
-  async function solicitarPregunta(indice) {
-    try {
-      // Pedimos al doPost la pregunta actual (coincide con handleObtenerPregunta en GS)
-      const data = await peticionServidor({
-        accion: 'pregunta',
-        sessionToken: token,
-        indice: indice
+    async function peticionServidor(payload) {
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(payload)
       });
-
-      if (data.ok) {
-        document.getElementById('pantalla-carga').style.display = 'none';
-        document.getElementById('juego-container').style.display = 'block';
-        
-        renderizarPregunta(data);
-      } else {
-        alert("Aviso del servidor: " + data.mensaje);
-        if(data.error === "SESION_INVALIDA") window.location.href = "index.html";
-      }
-    } catch (e) {
-      console.error(e);
-      alert("Error de conexión con el servidor de la CUN.");
+      return await res.json();
     }
-  }
 
-  function renderizarPregunta(data) {
-    document.getElementById('txt-pregunta').innerText = data.pregunta;
-    document.getElementById('question-count').innerText = `Pregunta ${data.indice + 1} de ${data.total}`;
-    
-    const grid = document.getElementById('grid-opciones');
-    grid.innerHTML = '';
-    
-    data.opciones.forEach((opcion, i) => {
-      const btn = document.createElement('button');
-      btn.className = 'btn-opcion';
-      btn.innerText = opcion;
-      btn.onclick = () => enviarRespuesta(i);
-      grid.appendChild(btn);
-    });
+    async function solicitarPregunta(indice) {
+      clearInterval(timerInterval); // Pausar timer mientras carga
+      document.getElementById('barra-tiempo').style.width = '100%';
 
-    const progreso = (data.indice / data.total) * 100;
-    document.getElementById('barra-progreso').style.width = `${progreso}%`;
-    
-    // Guardamos el momento exacto en que vio la pregunta
-    inicioPreguntaMs = Date.now();
-  }
+      try {
+        const data = await peticionServidor({ accion: 'pregunta', sessionToken: token, indice: indice });
 
-  async function enviarRespuesta(opcionIndex) {
-    // Bloquear clics para evitar spam
-    const botones = document.querySelectorAll('.btn-opcion');
-    botones.forEach(b => b.style.pointerEvents = 'none');
-
-    // Calcular el tiempo que le tomó (el backend lo exige para el bono de velocidad)
-    const segundosUsados = (Date.now() - inicioPreguntaMs) / 1000;
-
-    try {
-      // Coincide con handleResponder en GS
-      const data = await peticionServidor({
-        accion: 'responder',
-        sessionToken: token,
-        indice: indiceActual,
-        opcion: opcionIndex,
-        tiempoUsado: segundosUsados 
-      });
-      
-      if (data.ok) {
-        puntajeAcumulado = data.puntajeTotal;
-        indiceActual++;
-        
-        if (data.juegoTerminado) {
-          finalizarJuego();
+        if (data.ok) {
+          document.getElementById('juego-container').style.display = 'block';
+          renderizarPregunta(data);
+          iniciarTemporizadorVisual();
         } else {
-          // Si no ha terminado, pedimos la siguiente pregunta
-          await solicitarPregunta(indiceActual);
+          alert("Aviso: " + data.mensaje);
         }
-      } else {
-        alert("Error al registrar respuesta: " + data.mensaje);
+      } catch (e) {
+        console.error(e);
+        alert("Error de red.");
       }
-    } catch (e) {
-      console.error("Error al enviar respuesta", e);
-      alert("Fallo de red. Intenta de nuevo.");
-      botones.forEach(b => b.style.pointerEvents = 'auto');
     }
-  }
 
-  function iniciarTimer() {
-    const display = document.getElementById('timer');
-    timerInterval = setInterval(() => {
-      tiempoTotal++;
-      const mins = Math.floor(tiempoTotal / 60).toString().padStart(2, '0');
-      const secs = (tiempoTotal % 60).toString().padStart(2, '0');
-      display.innerText = `${mins}:${secs}`;
-    }, 1000);
-  }
+    function renderizarPregunta(data) {
+      preguntaActualTexto = data.pregunta;
+      document.getElementById('txt-pregunta').innerText = data.pregunta;
+      document.getElementById('question-count').innerText = `Pregunta ${data.indice + 1} de ${data.total}`;
+      document.getElementById('puntaje-actual').innerText = `Puntos: ${puntajeAcumulado}`;
+      
+      const grid = document.getElementById('grid-opciones');
+      grid.innerHTML = '';
+      
+      data.opciones.forEach((opcion, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-opcion';
+        btn.innerText = opcion;
+        btn.onclick = () => enviarRespuesta(i, opcion);
+        grid.appendChild(btn);
+      });
+    }
 
-  function finalizarJuego() {
-    clearInterval(timerInterval);
-    document.getElementById('juego-container').style.display = 'none';
-    document.getElementById('pantalla-final').style.display = 'block';
-    document.getElementById('final-score').innerText = puntajeAcumulado;
-    document.getElementById('barra-progreso').style.width = `100%`;
-  }
-</script>
+    // EL TEMPORIZADOR VISUAL Y AUTO-AVANCE
+    function iniciarTemporizadorVisual() {
+      tiempoRestante = TIEMPO_MAX;
+      const barra = document.getElementById('barra-tiempo');
+      barra.style.backgroundColor = 'var(--success)';
+      
+      timerInterval = setInterval(() => {
+        tiempoRestante -= 0.1;
+        let porcentaje = (tiempoRestante / TIEMPO_MAX) * 100;
+        barra.style.width = `${porcentaje}%`;
+        
+        // Cambiar color según tiempo
+        if(tiempoRestante <= 3) barra.style.backgroundColor = 'var(--danger)';
+        else if(tiempoRestante <= 6) barra.style.backgroundColor = 'var(--warning)';
 
+        // AUTO AVANCE SI SE ACABA EL TIEMPO
+        if (tiempoRestante <= 0) {
+          clearInterval(timerInterval);
+          enviarRespuesta(-1, "Tiempo Agotado"); // -1 indica que no respondió
+        }
+      }, 100);
+    }
+
+    async function enviarRespuesta(opcionIndex, textoOpcionElegida) {
+      clearInterval(timerInterval);
+      const botones = document.querySelectorAll('.btn-opcion');
+      botones.forEach(b => b.style.pointerEvents = 'none'); // Bloquear doble clic
+
+      const segundosUsados = TIEMPO_MAX - Math.max(0, tiempoRestante);
+
+      try {
+        const data = await peticionServidor({
+          accion: 'responder',
+          sessionToken: token,
+          indice: indiceActual,
+          opcion: opcionIndex,
+          tiempoUsado: segundosUsados 
+        });
+        
+        if (data.ok) {
+          puntajeAcumulado = data.puntajeTotal;
+          
+          // GUARDAR PARA REVISIÓN ACADÉMICA
+          historialRevision.push({
+            pregunta: preguntaActualTexto,
+            elegida: opcionIndex === -1 ? "Ninguna (Tiempo)" : textoOpcionElegida,
+            correcta: data.textoCorrecta || "Dato no devuelto por servidor",
+            esCorrecta: data.esCorrecta
+          });
+
+          indiceActual++;
+          
+          if (data.juegoTerminado) {
+            finalizarJuego();
+          } else {
+            await solicitarPregunta(indiceActual);
+          }
+        }
+      } catch (e) {
+        console.error("Error", e);
+        alert("Fallo de red al enviar respuesta.");
+      }
+    }
+
+    function finalizarJuego() {
+      document.getElementById('juego-container').style.display = 'none';
+      document.getElementById('pantalla-final').style.display = 'block';
+      document.getElementById('final-score').innerText = puntajeAcumulado;
+
+      // CONSTRUIR TABLA DE REVISIÓN
+      const tbody = document.getElementById('review-body');
+      tbody.innerHTML = '';
+      historialRevision.forEach(item => {
+        const tr = document.createElement('tr');
+        const colorClass = item.esCorrecta ? 'correct' : 'incorrect';
+        tr.innerHTML = `
+          <td>${item.pregunta}</td>
+          <td class="${colorClass}">${item.elegida}</td>
+          <td>${item.correcta}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+  </script>
 </body>
 </html>
