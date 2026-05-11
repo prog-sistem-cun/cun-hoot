@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CUN-hoot | Reto en Vivo</title>
+  <style>
+    :root {
+      --cun-blue:  #002b5c;
+      --cun-gold:  #d89e00;
+      --cun-light: #f3f7fe;
+      --success:   #28a745;
+      --danger:    #dc3545;
+      --radio:     12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--cun-light);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--cun-blue);
+      color: white;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .timer-container {
+      background: rgba(255,255,255,0.1);
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      border: 2px solid var(--cun-gold);
+    }
+
+    /* ── CONTENEDOR JUEGO ── */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    #pantalla-carga { text-align: center; }
+    
+    .pregunta-card {
+      background: white;
+      width: 100%;
+      padding: 30px;
+      border-radius: var(--radio);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .pregunta-texto {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 25px;
+      color: var(--cun-blue);
+    }
+
+    .opciones-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      width: 100%;
+    }
+
+    @media (max-width: 600px) {
+      .opciones-grid { grid-template-columns: 1fr; }
+    }
+
+    .btn-opcion {
+      background: white;
+      border: 2px solid #e0e0e0;
+      padding: 15px;
+      border-radius: var(--radio);
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: left;
+      display: flex;
+      align-items: center;
+    }
+
+    .btn-opcion:hover {
+      border-color: var(--cun-gold);
+      background: #fffdf5;
+      transform: translateY(-2px);
+    }
+
+    .btn-opcion:active { transform: translateY(0); }
+
+    /* ── BARRA DE PROGRESO ── */
+    .progreso-container {
+      width: 100%;
+      background: #ddd;
+      height: 8px;
+      border-radius: 4px;
+      margin-top: 20px;
+      overflow: hidden;
+    }
+    .progreso-barra {
+      background: var(--cun-gold);
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    /* ── RESULTADOS ── */
+    #pantalla-final {
+      display: none;
+      text-align: center;
+      background: white;
+      padding: 40px;
+      border-radius: var(--radio);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .score-grande {
+      font-size: 4rem;
+      color: var(--cun-gold);
+      font-weight: bold;
+      margin: 20px 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .spinner {
+      border: 4px solid rgba(0,0,0,0.1);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border-left-color: var(--cun-blue);
+      animation: spin 1s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="user-info">
+    <strong id="student-name">Estudiante CUN</strong><br>
+    <small id="question-count">Pregunta 0 de 20</small>
+  </div>
+  <div class="timer-container" id="timer">00:00</div>
+</header>
+
+<main>
+  <div id="pantalla-carga">
+    <div class="spinner"></div>
+    <p style="margin-top:15px">Preparando tu cuestionario...</p>
+  </div>
+
+  <div id="juego-container" style="display:none; width: 100%;">
+    <div class="pregunta-card">
+      <div class="pregunta-texto" id="txt-pregunta">Cargando pregunta...</div>
+      <div class="opciones-grid" id="grid-opciones">
+        </div>
+    </div>
+    <div class="progreso-container">
+      <div class="progreso-barra" id="barra-progreso"></div>
+    </div>
+  </div>
+
+  <div id="pantalla-final">
+    <h1>¡Reto Finalizado!</h1>
+    <p>Tu puntaje total es:</p>
+    <div class="score-grande" id="final-score">0</div>
+    <p id="mensaje-final">Gracias por participar en la Semana C.</p>
+    <button onclick="location.href='index.html'" style="margin-top:20px; padding:10px 20px; cursor:pointer; background:var(--cun-blue); color:white; border:none; border-radius:5px;">Volver al inicio</button>
+  </div>
+</main>
+
+<script>
+  // CONFIGURACIÓN
+  const SCRIPT_URL = 'https://script.google.com/a/macros/cun.edu.co/s/AKfycbwGL06rkbAkcbGxtrjVuRwAeiDoLF-kp1qcJRUK2yi_J51yJrXaJX2QsVrjSzTrSFqVHQ/exec';
+  
+  // ESTADO DEL JUEGO
+  let preguntas = [];
+  let indiceActual = 0;
+  let puntajeAcumulado = 0;
+  let tiempoTotal = 0;
+  let timerInterval;
+  let token = new URLSearchParams(window.location.search).get('token');
+
+  // Inicialización
+  window.onload = async () => {
+    if (!token) {
+      alert("Acceso no autorizado. Regresa al inicio.");
+      window.location.href = "index.html";
+      return;
+    }
+    await cargarPreguntas();
+  };
+
+  async function cargarPreguntas() {
+    try {
+      const response = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Importante para evitar problemas de CORS en algunos entornos
+        body: JSON.stringify({ action: 'getQuestions', token: token })
+      });
+
+      // NOTA: Debido a que Apps Script con no-cors no devuelve el cuerpo, 
+      // lo ideal es usar google.script.run si estuvieras dentro de GAS.
+      // Como estás en GitHub Pages, el "doPost" debe manejar el flujo.
+      // Simulación de carga (en producción el fetch debe retornar el JSON)
+      
+      // Dado que el HAR muestra que estás teniendo problemas de comunicación, 
+      // vamos a realizar una petición de tipo "GET" o asegurar que el doPost responda CORS.
+      
+      const res = await fetch(`${SCRIPT_URL}?action=getQuestions&token=${token}`);
+      const data = await res.json();
+
+      if (data.ok) {
+        preguntas = data.preguntas;
+        document.getElementById('student-name').innerText = data.nombre;
+        iniciarJuego();
+      } else {
+        alert("Error: " + data.mensaje);
+        window.location.href = "index.html";
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Error de conexión con el servidor de la CUN.");
+    }
+  }
+
+  function iniciarJuego() {
+    document.getElementById('pantalla-carga').style.display = 'none';
+    document.getElementById('juego-container').style.display = 'block';
+    iniciarTimer();
+    mostrarPregunta();
+  }
+
+  function iniciarTimer() {
+    const display = document.getElementById('timer');
+    timerInterval = setInterval(() => {
+      tiempoTotal++;
+      const mins = Math.floor(tiempoTotal / 60).toString().padStart(2, '0');
+      const secs = (tiempoTotal % 60).toString().padStart(2, '0');
+      display.innerText = `${mins}:${secs}`;
+    }, 1000);
+  }
+
+  function mostrarPregunta() {
+    if (indiceActual >= preguntas.length) {
+      finalizarJuego();
+      return;
+    }
+
+    const p = preguntas[indiceActual];
+    document.getElementById('txt-pregunta').innerText = p.pregunta;
+    document.getElementById('question-count').innerText = `Pregunta ${indiceActual + 1} de ${preguntas.length}`;
+    
+    const grid = document.getElementById('grid-opciones');
+    grid.innerHTML = '';
+    
+    p.opciones.forEach((opcion, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'btn-opcion';
+      btn.innerText = opcion;
+      btn.onclick = () => enviarRespuesta(i);
+      grid.appendChild(btn);
+    });
+
+    const progreso = ((indiceActual) / preguntas.length) * 100;
+    document.getElementById('barra-progreso').style.width = `${progreso}%`;
+  }
+
+  async function enviarRespuesta(opcionIndex) {
+    // Bloquear clics mientras procesa
+    const botones = document.querySelectorAll('.btn-opcion');
+    botones.forEach(b => b.style.pointerEvents = 'none');
+
+    try {
+      const res = await fetch(`${SCRIPT_URL}?action=respuesta&token=${token}&p=${indiceActual}&r=${opcionIndex}`);
+      const data = await res.json();
+      
+      if (data.ok) {
+        puntajeAcumulado = data.nuevoPuntaje;
+        indiceActual++;
+        mostrarPregunta();
+      }
+    } catch (e) {
+      console.error("Error al enviar respuesta");
+      // Avanzar aunque falle la red para no trabar al alumno, el servidor validará al final
+      indiceActual++;
+      mostrarPregunta();
+    }
+  }
+
+  function finalizarJuego() {
+    clearInterval(timerInterval);
+    document.getElementById('juego-container').style.display = 'none';
+    document.getElementById('pantalla-final').style.display = 'block';
+    document.getElementById('final-score').innerText = puntajeAcumulado;
+    document.getElementById('barra-progreso').style.width = `100%`;
+  }
+</script>
+
+</body>
+</html>
