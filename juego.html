@@ -201,12 +201,15 @@
   const SCRIPT_URL = 'https://script.google.com/a/macros/cun.edu.co/s/AKfycbwGL06rkbAkcbGxtrjVuRwAeiDoLF-kp1qcJRUK2yi_J51yJrXaJX2QsVrjSzTrSFqVHQ/exec';
   
   // ESTADO DEL JUEGO
-  let preguntas = [];
   let indiceActual = 0;
   let puntajeAcumulado = 0;
   let tiempoTotal = 0;
   let timerInterval;
-  let token = new URLSearchParams(window.location.search).get('token');
+  let inicioPreguntaMs = 0; // Para calcular los segundos que tarda en responder
+  
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get('token');
+  const nombreEstudiante = urlParams.get('nombre') || 'Estudiante CUN';
 
   // Inicialización
   window.onload = async () => {
@@ -215,31 +218,40 @@
       window.location.href = "index.html";
       return;
     }
-    await cargarPreguntas();
+    
+    document.getElementById('student-name').innerText = decodeURIComponent(nombreEstudiante);
+    iniciarTimer();
+    await solicitarPregunta(0);
   };
 
-  async function cargarPreguntas() {
+  // ─── EL TRUCO PARA EVITAR CORS EN APPS SCRIPT ───
+  // Enviar como POST puro (sin headers de JSON) evita el preflight OPTIONS
+  async function peticionServidor(payload) {
+    const res = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+    return await res.json();
+  }
+
+  // ─── LÓGICA DEL JUEGO ───
+  async function solicitarPregunta(indice) {
     try {
-
-
-      // NOTA: Debido a que Apps Script con no-cors no devuelve el cuerpo, 
-      // lo ideal es usar google.script.run si estuvieras dentro de GAS.
-      // Como estás en GitHub Pages, el "doPost" debe manejar el flujo.
-      // Simulación de carga (en producción el fetch debe retornar el JSON)
-      
-      // Dado que el HAR muestra que estás teniendo problemas de comunicación, 
-      // vamos a realizar una petición de tipo "GET" o asegurar que el doPost responda CORS.
-      
-      const res = await fetch(`${SCRIPT_URL}?action=getQuestions&token=${token}`);
-      const data = await res.json();
+      // Pedimos al doPost la pregunta actual (coincide con handleObtenerPregunta en GS)
+      const data = await peticionServidor({
+        accion: 'pregunta',
+        sessionToken: token,
+        indice: indice
+      });
 
       if (data.ok) {
-        preguntas = data.preguntas;
-        document.getElementById('student-name').innerText = data.nombre;
-        iniciarJuego();
+        document.getElementById('pantalla-carga').style.display = 'none';
+        document.getElementById('juego-container').style.display = 'block';
+        
+        renderizarPregunta(data);
       } else {
-        alert("Error: " + data.mensaje);
-        window.location.href = "index.html";
+        alert("Aviso del servidor: " + data.mensaje);
+        if(data.error === "SESION_INVALIDA") window.location.href = "index.html";
       }
     } catch (e) {
       console.error(e);
@@ -247,11 +259,64 @@
     }
   }
 
-  function iniciarJuego() {
-    document.getElementById('pantalla-carga').style.display = 'none';
-    document.getElementById('juego-container').style.display = 'block';
-    iniciarTimer();
-    mostrarPregunta();
+  function renderizarPregunta(data) {
+    document.getElementById('txt-pregunta').innerText = data.pregunta;
+    document.getElementById('question-count').innerText = `Pregunta ${data.indice + 1} de ${data.total}`;
+    
+    const grid = document.getElementById('grid-opciones');
+    grid.innerHTML = '';
+    
+    data.opciones.forEach((opcion, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'btn-opcion';
+      btn.innerText = opcion;
+      btn.onclick = () => enviarRespuesta(i);
+      grid.appendChild(btn);
+    });
+
+    const progreso = (data.indice / data.total) * 100;
+    document.getElementById('barra-progreso').style.width = `${progreso}%`;
+    
+    // Guardamos el momento exacto en que vio la pregunta
+    inicioPreguntaMs = Date.now();
+  }
+
+  async function enviarRespuesta(opcionIndex) {
+    // Bloquear clics para evitar spam
+    const botones = document.querySelectorAll('.btn-opcion');
+    botones.forEach(b => b.style.pointerEvents = 'none');
+
+    // Calcular el tiempo que le tomó (el backend lo exige para el bono de velocidad)
+    const segundosUsados = (Date.now() - inicioPreguntaMs) / 1000;
+
+    try {
+      // Coincide con handleResponder en GS
+      const data = await peticionServidor({
+        accion: 'responder',
+        sessionToken: token,
+        indice: indiceActual,
+        opcion: opcionIndex,
+        tiempoUsado: segundosUsados 
+      });
+      
+      if (data.ok) {
+        puntajeAcumulado = data.puntajeTotal;
+        indiceActual++;
+        
+        if (data.juegoTerminado) {
+          finalizarJuego();
+        } else {
+          // Si no ha terminado, pedimos la siguiente pregunta
+          await solicitarPregunta(indiceActual);
+        }
+      } else {
+        alert("Error al registrar respuesta: " + data.mensaje);
+      }
+    } catch (e) {
+      console.error("Error al enviar respuesta", e);
+      alert("Fallo de red. Intenta de nuevo.");
+      botones.forEach(b => b.style.pointerEvents = 'auto');
+    }
   }
 
   function iniciarTimer() {
@@ -262,53 +327,6 @@
       const secs = (tiempoTotal % 60).toString().padStart(2, '0');
       display.innerText = `${mins}:${secs}`;
     }, 1000);
-  }
-
-  function mostrarPregunta() {
-    if (indiceActual >= preguntas.length) {
-      finalizarJuego();
-      return;
-    }
-
-    const p = preguntas[indiceActual];
-    document.getElementById('txt-pregunta').innerText = p.pregunta;
-    document.getElementById('question-count').innerText = `Pregunta ${indiceActual + 1} de ${preguntas.length}`;
-    
-    const grid = document.getElementById('grid-opciones');
-    grid.innerHTML = '';
-    
-    p.opciones.forEach((opcion, i) => {
-      const btn = document.createElement('button');
-      btn.className = 'btn-opcion';
-      btn.innerText = opcion;
-      btn.onclick = () => enviarRespuesta(i);
-      grid.appendChild(btn);
-    });
-
-    const progreso = ((indiceActual) / preguntas.length) * 100;
-    document.getElementById('barra-progreso').style.width = `${progreso}%`;
-  }
-
-  async function enviarRespuesta(opcionIndex) {
-    // Bloquear clics mientras procesa
-    const botones = document.querySelectorAll('.btn-opcion');
-    botones.forEach(b => b.style.pointerEvents = 'none');
-
-    try {
-      const res = await fetch(`${SCRIPT_URL}?action=respuesta&token=${token}&p=${indiceActual}&r=${opcionIndex}`);
-      const data = await res.json();
-      
-      if (data.ok) {
-        puntajeAcumulado = data.nuevoPuntaje;
-        indiceActual++;
-        mostrarPregunta();
-      }
-    } catch (e) {
-      console.error("Error al enviar respuesta");
-      // Avanzar aunque falle la red para no trabar al alumno, el servidor validará al final
-      indiceActual++;
-      mostrarPregunta();
-    }
   }
 
   function finalizarJuego() {
