@@ -1,21 +1,29 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CUN-hoot | Reto en Vivo</title>
   <style>
     :root {
-      --azul:      #002b5c;
+      --azul: #002b5c;
       --azul-dark: #001a3a;
-      --oro:       #ffc107;
-      --verde:     #1db954;
-      --rojo:      #e53935;
-      --naranja:   #ff6d00;
-      --radio:     14px;
+      --oro: #ffc107;
+      --verde: #1db954;
+      --rojo: #e53935;
+      --naranja: #ff6d00;
+      --radio: 14px;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       font-family: 'Segoe UI', system-ui, sans-serif;
       background: linear-gradient(135deg, var(--azul-dark) 0%, #003d82 100%);
@@ -26,7 +34,7 @@
 
     /* ── HEADER ─────────────────────────────────────────────── */
     header {
-      background: rgba(0,0,0,0.3);
+      background: rgba(0, 0, 0, 0.3);
       backdrop-filter: blur(12px);
       color: #fff;
       padding: 10px 20px;
@@ -36,487 +44,788 @@
       gap: 10px;
       flex-wrap: wrap;
     }
-    .h-logo { font-weight: 900; font-size: 20px; }
-    .h-logo span { color: var(--oro); }
-    .h-info { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .badge {
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.2);
-      padding: 3px 11px; border-radius: 20px; font-size: 12px; white-space: nowrap;
+
+    .h-logo {
+      font-weight: 900;
+      font-size: 20px;
     }
-    .badge-email { color: var(--oro); font-weight: 600; }
+
+    .h-logo span {
+      color: var(--oro);
+    }
+
+    .h-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 3px 11px;
+      border-radius: 20px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .badge-email {
+      color: var(--oro);
+      font-weight: 600;
+    }
 
     /* ── CONTAINER ───────────────────────────────────────────── */
     .container {
-      flex: 1; display: flex; justify-content: center;
-      align-items: flex-start; padding: 18px 14px 30px;
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 18px 14px 30px;
     }
+
     .card {
-      background: #fff; border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.4);
-      width: 100%; max-width: 640px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .4);
+      width: 100%;
+      max-width: 640px;
       padding: 26px 22px 22px;
       animation: aparecer .35s ease-out both;
     }
+
     @keyframes aparecer {
-      from { opacity:0; transform:translateY(22px); }
-      to   { opacity:1; transform:translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(22px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* ── CARGA ───────────────────────────────────────────────── */
     .pantalla-carga {
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 14px; padding: 48px 20px; color: #6b7280;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 48px 20px;
+      color: #6b7280;
     }
+
     .spinner {
-      width: 48px; height: 48px;
-      border: 5px solid #e5e7eb; border-top-color: var(--azul);
-      border-radius: 50%; animation: girar .8s linear infinite;
+      width: 48px;
+      height: 48px;
+      border: 5px solid #e5e7eb;
+      border-top-color: var(--azul);
+      border-radius: 50%;
+      animation: girar .8s linear infinite;
     }
-    @keyframes girar { to { transform: rotate(360deg); } }
+
+    @keyframes girar {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
     /* ── META (contador / puntos) ────────────────────────────── */
     .meta {
-      display: flex; justify-content: space-between;
-      align-items: center; font-size: 13px; font-weight: 600;
-      color: #6b7280; margin-bottom: 10px; flex-wrap: wrap; gap: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: #6b7280;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 6px;
     }
+
     .puntos-badge {
-      background: var(--azul); color: var(--oro);
-      padding: 4px 14px; border-radius: 20px; font-size: 14px; font-weight: 800;
+      background: var(--azul);
+      color: var(--oro);
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 800;
     }
 
     /* ── BARRA DE TIEMPO ─────────────────────────────────────── */
     .barra-wrap {
-      width: 100%; height: 14px; background: #e5e7eb;
-      border-radius: 7px; overflow: hidden; margin-bottom: 18px; position: relative;
+      width: 100%;
+      height: 14px;
+      background: #e5e7eb;
+      border-radius: 7px;
+      overflow: hidden;
+      margin-bottom: 18px;
+      position: relative;
     }
+
     .barra-tiempo {
-      height: 100%; width: 100%; background: var(--verde);
-      border-radius: 7px; transition: width .1s linear, background-color .4s ease;
+      height: 100%;
+      width: 100%;
+      background: var(--verde);
+      border-radius: 7px;
+      transition: width .1s linear, background-color .4s ease;
     }
+
     .barra-seg {
-      position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
-      font-size: 10px; font-weight: 700; color: rgba(0,0,0,.45); pointer-events: none;
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 10px;
+      font-weight: 700;
+      color: rgba(0, 0, 0, .45);
+      pointer-events: none;
     }
 
     /* ── PREGUNTA ────────────────────────────────────────────── */
     .txt-pregunta {
-      font-size: clamp(15px, 3.5vw, 21px); font-weight: 700;
-      color: var(--azul-dark); line-height: 1.4; text-align: center;
-      margin-bottom: 22px; min-height: 56px;
+      font-size: clamp(15px, 3.5vw, 21px);
+      font-weight: 700;
+      color: var(--azul-dark);
+      line-height: 1.4;
+      text-align: center;
+      margin-bottom: 22px;
+      min-height: 56px;
     }
 
     /* ── GRID OPCIONES ───────────────────────────────────────── */
-    .grid-opciones { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
-    @media (max-width: 400px) { .grid-opciones { grid-template-columns: 1fr; } }
+    .grid-opciones {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 11px;
+    }
+
+    @media (max-width: 400px) {
+      .grid-opciones {
+        grid-template-columns: 1fr;
+      }
+    }
 
     .btn-opcion {
-      display: flex; align-items: center; gap: 10px;
-      border: none; padding: 18px 14px; border-radius: var(--radio);
-      font-size: clamp(13px, 2.5vw, 15px); font-weight: 700; color: #fff;
-      cursor: pointer; transition: transform .15s, filter .15s;
-      box-shadow: 0 5px 0 rgba(0,0,0,.25); text-align: left;
-      word-break: break-word; line-height: 1.3;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: none;
+      padding: 18px 14px;
+      border-radius: var(--radio);
+      font-size: clamp(13px, 2.5vw, 15px);
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      transition: transform .15s, filter .15s;
+      box-shadow: 0 5px 0 rgba(0, 0, 0, .25);
+      text-align: left;
+      word-break: break-word;
+      line-height: 1.3;
     }
-    .btn-opcion:nth-child(1) { background:#e53935; box-shadow:0 5px 0 #b71c1c; }
-    .btn-opcion:nth-child(2) { background:#1565c0; box-shadow:0 5px 0 #0d47a1; }
-    .btn-opcion:nth-child(3) { background:#f9a825; box-shadow:0 5px 0 #f57f17; color:#1a1a1a; }
-    .btn-opcion:nth-child(4) { background:#2e7d32; box-shadow:0 5px 0 #1b5e20; }
-    .btn-opcion:hover:not(:disabled) { transform:translateY(-3px); filter:brightness(1.1); }
-    .btn-opcion:active:not(:disabled) { transform:translateY(3px); box-shadow:0 1px 0 rgba(0,0,0,.25)!important; }
-    .btn-opcion:disabled { cursor:not-allowed; filter:brightness(.7); }
+
+    .btn-opcion:nth-child(1) {
+      background: #e53935;
+      box-shadow: 0 5px 0 #b71c1c;
+    }
+
+    .btn-opcion:nth-child(2) {
+      background: #1565c0;
+      box-shadow: 0 5px 0 #0d47a1;
+    }
+
+    .btn-opcion:nth-child(3) {
+      background: #f9a825;
+      box-shadow: 0 5px 0 #f57f17;
+      color: #1a1a1a;
+    }
+
+    .btn-opcion:nth-child(4) {
+      background: #2e7d32;
+      box-shadow: 0 5px 0 #1b5e20;
+    }
+
+    .btn-opcion:hover:not(:disabled) {
+      transform: translateY(-3px);
+      filter: brightness(1.1);
+    }
+
+    .btn-opcion:active:not(:disabled) {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 rgba(0, 0, 0, .25) !important;
+    }
+
+    .btn-opcion:disabled {
+      cursor: not-allowed;
+      filter: brightness(.7);
+    }
 
     /* Estado correcto/incorrecto al revelar */
-    .btn-opcion.es-correcta  { outline: 4px solid #fff; filter: brightness(1.15); transform: scale(1.03); }
-    .btn-opcion.es-incorrecta{ opacity: .45; }
+    .btn-opcion.es-correcta {
+      outline: 4px solid #fff;
+      filter: brightness(1.15);
+      transform: scale(1.03);
+    }
+
+    .btn-opcion.es-incorrecta {
+      opacity: .45;
+    }
 
     .btn-letra {
-      width: 28px; height: 28px; min-width: 28px;
-      background: rgba(255,255,255,.25); border-radius: 6px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 900;
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
+      background: rgba(255, 255, 255, .25);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 900;
     }
 
     /* ── FEEDBACK OVERLAY ────────────────────────────────────── */
     .feedback-overlay {
-      position: fixed; inset: 0; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; z-index: 100;
-      opacity: 0; pointer-events: none; transition: opacity .2s;
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s;
     }
-    .feedback-overlay.visible { opacity: 1; pointer-events: all; }
-    .feedback-overlay.ok   { background: rgba(29,185,84,.92); }
-    .feedback-overlay.mal  { background: rgba(229,57,53,.92); }
-    .feedback-overlay.tick { background: rgba(255,109,0,.92); }
 
-    .fb-emoji  { font-size: 72px; margin-bottom: 10px; animation: pop .3s ease-out; }
-    .fb-titulo { font-size: 30px; font-weight: 900; color: #fff; margin-bottom: 6px; }
-    .fb-sub    { font-size: 15px; color: rgba(255,255,255,.9); text-align: center; padding: 0 24px; }
-    .fb-pts    { font-size: 22px; font-weight: 800; color: #fff; margin-top: 10px;
-                 background: rgba(0,0,0,.2); padding: 8px 20px; border-radius: 20px; }
-    @keyframes pop { from{transform:scale(.4);opacity:0} to{transform:scale(1);opacity:1} }
+    .feedback-overlay.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .feedback-overlay.ok {
+      background: rgba(29, 185, 84, .92);
+    }
+
+    .feedback-overlay.mal {
+      background: rgba(229, 57, 53, .92);
+    }
+
+    .feedback-overlay.tick {
+      background: rgba(255, 109, 0, .92);
+    }
+
+    .fb-emoji {
+      font-size: 72px;
+      margin-bottom: 10px;
+      animation: pop .3s ease-out;
+    }
+
+    .fb-titulo {
+      font-size: 30px;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .fb-sub {
+      font-size: 15px;
+      color: rgba(255, 255, 255, .9);
+      text-align: center;
+      padding: 0 24px;
+    }
+
+    .fb-pts {
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 10px;
+      background: rgba(0, 0, 0, .2);
+      padding: 8px 20px;
+      border-radius: 20px;
+    }
+
+    @keyframes pop {
+      from {
+        transform: scale(.4);
+        opacity: 0
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1
+      }
+    }
 
     /* ── PANTALLA FINAL ──────────────────────────────────────── */
-    #pantalla-final { display: none; }
+    #pantalla-final {
+      display: none;
+    }
 
     .score-wrap {
       background: linear-gradient(135deg, var(--azul-dark), var(--azul));
-      border-radius: 16px; padding: 22px; color: #fff;
-      margin: 14px 0 22px; text-align: center;
+      border-radius: 16px;
+      padding: 22px;
+      color: #fff;
+      margin: 14px 0 22px;
+      text-align: center;
     }
-    .score-label { font-size: 13px; opacity: .8; margin-bottom: 4px; }
-    .score-num   { font-size: 54px; font-weight: 900; color: var(--oro); line-height: 1; }
-    .score-max   { font-size: 13px; opacity: .6; margin-top: 4px; }
+
+    .score-label {
+      font-size: 13px;
+      opacity: .8;
+      margin-bottom: 4px;
+    }
+
+    .score-num {
+      font-size: 54px;
+      font-weight: 900;
+      color: var(--oro);
+      line-height: 1;
+    }
+
+    .score-max {
+      font-size: 13px;
+      opacity: .6;
+      margin-top: 4px;
+    }
+
     .email-badge {
-      display: inline-block; background: #f3f4f6; border-radius: 20px;
-      padding: 6px 16px; font-size: 13px; color: var(--azul); font-weight: 600;
+      display: inline-block;
+      background: #f3f4f6;
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 13px;
+      color: var(--azul);
+      font-weight: 600;
       margin-bottom: 18px;
     }
 
     /* ── REVISIÓN ACADÉMICA ──────────────────────────────────── */
-    .rev-titulo { font-size: 17px; font-weight: 800; color: var(--azul-dark); margin-bottom: 4px; text-align: center; }
-    .rev-sub    { font-size: 12px; color: #6b7280; text-align: center; margin-bottom: 12px; }
-    .rev-wrap   { max-height: 360px; overflow-y: auto; border-radius: 10px; border: 1px solid #e5e7eb; }
-
-    .rev-tabla          { width: 100%; border-collapse: collapse; font-size: 13px; }
-    .rev-tabla thead th {
-      background: var(--azul); color: #fff; padding: 9px 11px;
-      text-align: left; position: sticky; top: 0; z-index: 1;
+    .rev-titulo {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--azul-dark);
+      margin-bottom: 4px;
+      text-align: center;
     }
-    .rev-tabla tbody tr  { border-bottom: 1px solid #f3f4f6; }
-    .rev-tabla tbody tr:hover { background: #f9fafb; }
-    .rev-tabla td        { padding: 9px 11px; vertical-align: top; line-height: 1.4; }
-    .td-num   { color: #9ca3af; font-weight: 700; width: 26px; }
-    .chip-ok  { background:#dcfce7; color:#166534; border-radius:6px; padding:2px 7px; font-weight:700; font-size:11px; }
-    .chip-mal { background:#fee2e2; color:#991b1b; border-radius:6px; padding:2px 7px; font-weight:700; font-size:11px; }
-    .chip-tck { background:#fff7ed; color:#9a3412; border-radius:6px; padding:2px 7px; font-weight:700; font-size:11px; }
-    .td-ok    { color:#166534; font-weight:600; }
+
+    .rev-sub {
+      font-size: 12px;
+      color: #6b7280;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .rev-wrap {
+      max-height: 360px;
+      overflow-y: auto;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .rev-tabla {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .rev-tabla thead th {
+      background: var(--azul);
+      color: #fff;
+      padding: 9px 11px;
+      text-align: left;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .rev-tabla tbody tr {
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    .rev-tabla tbody tr:hover {
+      background: #f9fafb;
+    }
+
+    .rev-tabla td {
+      padding: 9px 11px;
+      vertical-align: top;
+      line-height: 1.4;
+    }
+
+    .td-num {
+      color: #9ca3af;
+      font-weight: 700;
+      width: 26px;
+    }
+
+    .chip-ok {
+      background: #dcfce7;
+      color: #166534;
+      border-radius: 6px;
+      padding: 2px 7px;
+      font-weight: 700;
+      font-size: 11px;
+    }
+
+    .chip-mal {
+      background: #fee2e2;
+      color: #991b1b;
+      border-radius: 6px;
+      padding: 2px 7px;
+      font-weight: 700;
+      font-size: 11px;
+    }
+
+    .chip-tck {
+      background: #fff7ed;
+      color: #9a3412;
+      border-radius: 6px;
+      padding: 2px 7px;
+      font-weight: 700;
+      font-size: 11px;
+    }
+
+    .td-ok {
+      color: #166534;
+      font-weight: 600;
+    }
   </style>
 </head>
+
 <body>
 
-<header>
-  <div class="h-logo">CUN<span>-hoot</span></div>
-  <div class="h-info">
-    <span class="badge badge-email" id="badge-email">...</span>
-    <span class="badge" id="badge-nombre">Cargando...</span>
+  <header>
+    <div class="h-logo">CUN<span>-hoot</span></div>
+    <div class="h-info">
+      <span class="badge badge-email" id="badge-email">...</span>
+      <span class="badge" id="badge-nombre">Cargando...</span>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="card" id="card">
+
+      <!-- Carga inicial -->
+      <div class="pantalla-carga" id="p-carga">
+        <div class="spinner"></div>
+        <span>Preparando el reto...</span>
+      </div>
+
+      <!-- Pregunta activa -->
+      <div id="p-pregunta" style="display:none;">
+        <div class="meta">
+          <span id="txt-contador">— de —</span>
+          <span class="puntos-badge" id="txt-puntos">0 pts</span>
+        </div>
+        <div class="barra-wrap">
+          <div class="barra-tiempo" id="barra"></div>
+          <span class="barra-seg" id="seg">10</span>
+        </div>
+        <p class="txt-pregunta" id="txt-pregunta">—</p>
+        <div class="grid-opciones" id="grid"></div>
+      </div>
+
+      <!-- Pantalla final -->
+      <div id="pantalla-final">
+        <h2 style="text-align:center;color:var(--azul-dark);margin-bottom:4px;">¡Reto Completado! 🎉</h2>
+        <div id="final-email" style="text-align:center;margin-top:8px;"></div>
+        <div class="score-wrap">
+          <div class="score-label">Tu puntaje final</div>
+          <div class="score-num" id="score-num">0</div>
+          <div class="score-max" id="score-max">de 2000 pts posibles</div>
+        </div>
+        <div class="rev-titulo">Revisión Académica</div>
+        <div class="rev-sub">Analiza cada pregunta y refuerza los temas donde fallaste.</div>
+        <div class="rev-wrap">
+          <table class="rev-tabla">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Pregunta</th>
+                <th>Tu respuesta</th>
+                <th>Respuesta correcta</th>
+              </tr>
+            </thead>
+            <tbody id="rev-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /card -->
   </div>
-</header>
 
-<div class="container">
-  <div class="card" id="card">
+  <!-- Overlay de feedback -->
+  <div class="feedback-overlay" id="overlay">
+    <div class="fb-emoji" id="fb-emoji"></div>
+    <div class="fb-titulo" id="fb-titulo"></div>
+    <div class="fb-sub" id="fb-sub"></div>
+    <div class="fb-pts" id="fb-pts" style="display:none;"></div>
+  </div>
 
-    <!-- Carga inicial -->
-    <div class="pantalla-carga" id="p-carga">
-      <div class="spinner"></div>
-      <span>Preparando el reto...</span>
-    </div>
+  <script>
+    // ── PARÁMETROS DE URL ──────────────────────────────────────
+    const SCRIPT_URL = 'https://script.google.com/a/macros/cun.edu.co/s/AKfycbwGL06rkbAkcbGxtrjVuRwAeiDoLF-kp1qcJRUK2yi_J51yJrXaJX2QsVrjSzTrSFqVHQ/exec';
+    const LETRAS = ['A', 'B', 'C', 'D'];
+    const p = new URLSearchParams(location.search);
+    const TOKEN = p.get('token') || '';
+    const NOMBRE = decodeURIComponent(p.get('nombre') || 'Estudiante');
+    const EMAIL = decodeURIComponent(p.get('email') || '');
 
-    <!-- Pregunta activa -->
-    <div id="p-pregunta" style="display:none;">
-      <div class="meta">
-        <span id="txt-contador">— de —</span>
-        <span class="puntos-badge" id="txt-puntos">0 pts</span>
-      </div>
-      <div class="barra-wrap">
-        <div class="barra-tiempo" id="barra"></div>
-        <span class="barra-seg" id="seg">10</span>
-      </div>
-      <p class="txt-pregunta" id="txt-pregunta">—</p>
-      <div class="grid-opciones" id="grid"></div>
-    </div>
+    document.getElementById('badge-nombre').textContent = NOMBRE;
+    document.getElementById('badge-email').textContent = EMAIL || 'Autenticado';
 
-    <!-- Pantalla final -->
-    <div id="pantalla-final">
-      <h2 style="text-align:center;color:var(--azul-dark);margin-bottom:4px;">¡Reto Completado! 🎉</h2>
-      <div id="final-email" style="text-align:center;margin-top:8px;"></div>
-      <div class="score-wrap">
-        <div class="score-label">Tu puntaje final</div>
-        <div class="score-num" id="score-num">0</div>
-        <div class="score-max" id="score-max">de 2000 pts posibles</div>
-      </div>
-      <div class="rev-titulo">Revisión Académica</div>
-      <div class="rev-sub">Analiza cada pregunta y refuerza los temas donde fallaste.</div>
-      <div class="rev-wrap">
-        <table class="rev-tabla">
-          <thead><tr><th>#</th><th>Pregunta</th><th>Tu respuesta</th><th>Respuesta correcta</th></tr></thead>
-          <tbody id="rev-body"></tbody>
-        </table>
-      </div>
-    </div>
+    // ── ESTADO DEL JUEGO ──────────────────────────────────────
+    let preguntas = [];   // [{p, o}, ...]
+    let correctas = [];   // array de índices (0-3) descifrados
+    let TIEMPO_MAX = 10;
+    let indice = 0;
+    let puntaje = 0;
+    let timerInterval = null;
+    let tiempoRestante = TIEMPO_MAX;
+    let bloqueado = false;
+    let respuestas = [];   // respuestas del usuario (-1 = tiempo)
+    let tiempos = [];   // segundos usados por pregunta
+    let historial = [];   // para la revisión académica
 
-  </div><!-- /card -->
-</div>
-
-<!-- Overlay de feedback -->
-<div class="feedback-overlay" id="overlay">
-  <div class="fb-emoji"  id="fb-emoji"></div>
-  <div class="fb-titulo" id="fb-titulo"></div>
-  <div class="fb-sub"    id="fb-sub"></div>
-  <div class="fb-pts"    id="fb-pts" style="display:none;"></div>
-</div>
-
-<script>
-  // ── PARÁMETROS DE URL ──────────────────────────────────────
-  const SCRIPT_URL = 'https://script.google.com/a/macros/cun.edu.co/s/AKfycbwGL06rkbAkcbGxtrjVuRwAeiDoLF-kp1qcJRUK2yi_J51yJrXaJX2QsVrjSzTrSFqVHQ/exec';
-  const LETRAS     = ['A','B','C','D'];
-  const p          = new URLSearchParams(location.search);
-  const TOKEN      = p.get('token')  || '';
-  const NOMBRE     = decodeURIComponent(p.get('nombre') || 'Estudiante');
-  const EMAIL      = decodeURIComponent(p.get('email')  || '');
-
-  document.getElementById('badge-nombre').textContent = NOMBRE;
-  document.getElementById('badge-email').textContent  = EMAIL || 'Autenticado';
-
-  // ── ESTADO DEL JUEGO ──────────────────────────────────────
-  let preguntas     = [];   // [{p, o}, ...]
-  let correctas     = [];   // array de índices (0-3) descifrados
-  let TIEMPO_MAX    = 10;
-  let indice        = 0;
-  let puntaje       = 0;
-  let timerInterval = null;
-  let tiempoRestante= TIEMPO_MAX;
-  let bloqueado     = false;
-  let respuestas    = [];   // respuestas del usuario (-1 = tiempo)
-  let tiempos       = [];   // segundos usados por pregunta
-  let historial     = [];   // para la revisión académica
-
-  // ── CIFRADO XOR (espejo del servidor) ─────────────────────
-  // Descifra el array de respuestas correctas recibido como hex.
-  function descifrarCorretas(enc, clave) {
-    const correctasArr = [];
-    for (let i = 0; i < enc.length; i += 2) {
-      const byte = parseInt(enc.substr(i, 2), 16);
-      correctasArr.push(byte ^ clave.charCodeAt((i / 2) % clave.length));
-    }
-    return correctasArr;
-  }
-
-  // ── INICIO: UNA SOLA LLAMADA AL SERVIDOR ──────────────────
-  async function iniciar() {
-    try {
-      const data = await post({ accion: 'iniciar', sessionToken: TOKEN });
-      if (!data.ok) { mostrarError(data.mensaje); return; }
-
-      preguntas  = data.preguntas;
-      correctas  = descifrarCorretas(data.enc, TOKEN);
-      TIEMPO_MAX = data.tiempo || 10;
-
-      mostrarPregunta(0);
-    } catch(e) {
-      mostrarError('Error de red al cargar el reto. Verifica tu conexión.');
-    }
-  }
-
-  // ── RENDERIZAR PREGUNTA (100% local, sin servidor) ─────────
-  function mostrarPregunta(idx) {
-    indice         = idx;
-    tiempoRestante = TIEMPO_MAX;
-    bloqueado      = false;
-
-    document.getElementById('txt-contador').textContent =
-      `Pregunta ${idx + 1} de ${preguntas.length}`;
-    document.getElementById('txt-puntos').textContent = `${puntaje} pts`;
-    document.getElementById('txt-pregunta').textContent = preguntas[idx].p;
-
-    const barra = document.getElementById('barra');
-    barra.style.width = '100%';
-    barra.style.backgroundColor = 'var(--verde)';
-    document.getElementById('seg').textContent = TIEMPO_MAX;
-
-    const grid = document.getElementById('grid');
-    grid.innerHTML = '';
-    preguntas[idx].o.forEach((op, i) => {
-      const btn = document.createElement('button');
-      btn.className = 'btn-opcion';
-      btn.innerHTML = `<span class="btn-letra">${LETRAS[i]}</span>${op}`;
-      btn.dataset.idx = i;
-      btn.onclick = () => responder(i);
-      grid.appendChild(btn);
-    });
-
-    document.getElementById('p-carga').style.display    = 'none';
-    document.getElementById('p-pregunta').style.display = 'block';
-
-    iniciarTimer();
-  }
-
-  // ── TEMPORIZADOR LOCAL ─────────────────────────────────────
-  function iniciarTimer() {
-    clearInterval(timerInterval);
-    const barra = document.getElementById('barra');
-    const seg   = document.getElementById('seg');
-    timerInterval = setInterval(() => {
-      tiempoRestante = Math.max(0, +(tiempoRestante - 0.1).toFixed(1));
-      barra.style.width = (tiempoRestante / TIEMPO_MAX * 100) + '%';
-      seg.textContent   = Math.ceil(tiempoRestante);
-      if (tiempoRestante <= 3)      barra.style.backgroundColor = 'var(--rojo)';
-      else if (tiempoRestante <= 6) barra.style.backgroundColor = 'var(--naranja)';
-      if (tiempoRestante <= 0) { clearInterval(timerInterval); responder(-1); }
-    }, 100);
-  }
-
-  // ── RESPONDER (local, instantáneo) ────────────────────────
-  function responder(opcionIdx) {
-    if (bloqueado) return;
-    bloqueado = true;
-    clearInterval(timerInterval);
-
-    const segsUsados  = +(TIEMPO_MAX - Math.max(0, tiempoRestante)).toFixed(2);
-    const correcta    = correctas[indice];
-    const esCorrecta  = opcionIdx === correcta;
-    const tiempoAgot  = opcionIdx === -1;
-
-    respuestas.push(opcionIdx);
-    tiempos.push(segsUsados);
-
-    // Calcular puntos localmente (misma fórmula que el servidor)
-    let pts = 0;
-    if (esCorrecta) {
-      const tEf = Math.max(0, Math.min(segsUsados, TIEMPO_MAX));
-      pts = 50 + Math.round(((TIEMPO_MAX - tEf) / TIEMPO_MAX) * 50);
-      puntaje += pts;
+    // ── CIFRADO XOR (espejo del servidor) ─────────────────────
+    // Descifra el array de respuestas correctas recibido como hex.
+    function descifrarCorretas(enc, clave) {
+      const correctasArr = [];
+      for (let i = 0; i < enc.length; i += 2) {
+        const byte = parseInt(enc.substr(i, 2), 16);
+        correctasArr.push(byte ^ clave.charCodeAt((i / 2) % clave.length));
+      }
+      return correctasArr;
     }
 
-    // Revelar visualmente la correcta en los botones
-    document.querySelectorAll('.btn-opcion').forEach((btn, i) => {
-      btn.disabled = true;
-      if (i === correcta)                 btn.classList.add('es-correcta');
-      else if (i === opcionIdx && !esCorrecta) btn.classList.add('es-incorrecta');
-    });
+    // ── INICIO: UNA SOLA LLAMADA AL SERVIDOR ──────────────────
+    async function iniciar() {
+      try {
+        const data = await post({ accion: 'iniciar', sessionToken: TOKEN });
+        if (!data.ok) { mostrarError(data.mensaje); return; }
 
-    historial.push({
-      pregunta:      preguntas[indice].p,
-      elegida:       tiempoAgot ? null : preguntas[indice].o[opcionIdx],
-      tiempoAgot,
-      esCorrecta,
-      textoCorrecta: preguntas[indice].o[correcta],
-      pts
-    });
+        preguntas = data.preguntas;
+        correctas = descifrarCorretas(data.enc, TOKEN);
+        TIEMPO_MAX = data.tiempo || 10;
 
-    mostrarFeedback(esCorrecta, tiempoAgot, preguntas[indice].o[correcta], pts)
-      .then(() => {
-        const siguiente = indice + 1;
-        if (siguiente >= preguntas.length) {
-          finalizarJuego();
+        mostrarPregunta(0);
+      } catch (e) {
+        mostrarError('Error de red al cargar el reto. Verifica tu conexión.');
+      }
+    }
+
+    // ── RENDERIZAR PREGUNTA (100% local, sin servidor) ─────────
+    function mostrarPregunta(idx) {
+      indice = idx;
+      tiempoRestante = TIEMPO_MAX;
+      bloqueado = false;
+
+      document.getElementById('txt-contador').textContent =
+        `Pregunta ${idx + 1} de ${preguntas.length}`;
+      document.getElementById('txt-puntos').textContent = `${puntaje} pts`;
+      document.getElementById('txt-pregunta').textContent = preguntas[idx].p;
+
+      const barra = document.getElementById('barra');
+      barra.style.width = '100%';
+      barra.style.backgroundColor = 'var(--verde)';
+      document.getElementById('seg').textContent = TIEMPO_MAX;
+
+      const grid = document.getElementById('grid');
+      grid.innerHTML = '';
+      preguntas[idx].o.forEach((op, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-opcion';
+        btn.innerHTML = `<span class="btn-letra">${LETRAS[i]}</span>${op}`;
+        btn.dataset.idx = i;
+        btn.onclick = () => responder(i);
+        grid.appendChild(btn);
+      });
+
+      document.getElementById('p-carga').style.display = 'none';
+      document.getElementById('p-pregunta').style.display = 'block';
+
+      iniciarTimer();
+    }
+
+    // ── TEMPORIZADOR LOCAL ─────────────────────────────────────
+    function iniciarTimer() {
+      clearInterval(timerInterval);
+      const barra = document.getElementById('barra');
+      const seg = document.getElementById('seg');
+      timerInterval = setInterval(() => {
+        tiempoRestante = Math.max(0, +(tiempoRestante - 0.1).toFixed(1));
+        barra.style.width = (tiempoRestante / TIEMPO_MAX * 100) + '%';
+        seg.textContent = Math.ceil(tiempoRestante);
+        if (tiempoRestante <= 3) barra.style.backgroundColor = 'var(--rojo)';
+        else if (tiempoRestante <= 6) barra.style.backgroundColor = 'var(--naranja)';
+        if (tiempoRestante <= 0) { clearInterval(timerInterval); responder(-1); }
+      }, 100);
+    }
+
+    // ── RESPONDER (local, instantáneo) ────────────────────────
+    function responder(opcionIdx) {
+      if (bloqueado) return;
+      bloqueado = true;
+      clearInterval(timerInterval);
+
+      const segsUsados = +(TIEMPO_MAX - Math.max(0, tiempoRestante)).toFixed(2);
+      const correcta = correctas[indice];
+      const esCorrecta = opcionIdx === correcta;
+      const tiempoAgot = opcionIdx === -1;
+
+      respuestas.push(opcionIdx);
+      tiempos.push(segsUsados);
+
+      // Calcular puntos localmente (misma fórmula que el servidor)
+      let pts = 0;
+      if (esCorrecta) {
+        const tEf = Math.max(0, Math.min(segsUsados, TIEMPO_MAX));
+        pts = 50 + Math.round(((TIEMPO_MAX - tEf) / TIEMPO_MAX) * 50);
+        puntaje += pts;
+      }
+
+      // Revelar visualmente la correcta en los botones
+      document.querySelectorAll('.btn-opcion').forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === correcta) btn.classList.add('es-correcta');
+        else if (i === opcionIdx && !esCorrecta) btn.classList.add('es-incorrecta');
+      });
+
+      historial.push({
+        pregunta: preguntas[indice].p,
+        elegida: tiempoAgot ? null : preguntas[indice].o[opcionIdx],
+        tiempoAgot,
+        esCorrecta,
+        textoCorrecta: preguntas[indice].o[correcta],
+        pts
+      });
+
+      mostrarFeedback(esCorrecta, tiempoAgot, preguntas[indice].o[correcta], pts)
+        .then(() => {
+          const siguiente = indice + 1;
+          if (siguiente >= preguntas.length) {
+            finalizarJuego();
+          } else {
+            mostrarPregunta(siguiente);
+          }
+        });
+    }
+
+    // ── FEEDBACK VISUAL (sin servidor) ────────────────────────
+    function mostrarFeedback(esCorrecta, tiempoAgot, textoCorrecta, pts) {
+      return new Promise(resolve => {
+        const ov = document.getElementById('overlay');
+        ov.className = 'feedback-overlay visible ' + (tiempoAgot ? 'tick' : esCorrecta ? 'ok' : 'mal');
+
+        if (tiempoAgot) {
+          setFeedback('⏰', '¡Tiempo!', `Correcta: ${textoCorrecta}`, null);
+        } else if (esCorrecta) {
+          setFeedback('✅', '¡Correcto!', textoCorrecta, `+${pts} puntos`);
         } else {
-          mostrarPregunta(siguiente);
+          setFeedback('❌', '¡Incorrecto!', `Correcta: ${textoCorrecta}`, null);
         }
+
+        setTimeout(() => { ov.className = 'feedback-overlay'; resolve(); }, 1300);
       });
-  }
+    }
 
-  // ── FEEDBACK VISUAL (sin servidor) ────────────────────────
-  function mostrarFeedback(esCorrecta, tiempoAgot, textoCorrecta, pts) {
-    return new Promise(resolve => {
-      const ov = document.getElementById('overlay');
-      ov.className = 'feedback-overlay visible ' + (tiempoAgot ? 'tick' : esCorrecta ? 'ok' : 'mal');
+    function setFeedback(emoji, titulo, sub, pts) {
+      document.getElementById('fb-emoji').textContent = emoji;
+      document.getElementById('fb-titulo').textContent = titulo;
+      document.getElementById('fb-sub').textContent = sub;
+      const ptsEl = document.getElementById('fb-pts');
+      if (pts) { ptsEl.textContent = pts; ptsEl.style.display = 'block'; }
+      else { ptsEl.style.display = 'none'; }
+    }
 
-      if (tiempoAgot) {
-        setFeedback('⏰','¡Tiempo!',`Correcta: ${textoCorrecta}`, null);
-      } else if (esCorrecta) {
-        setFeedback('✅','¡Correcto!', textoCorrecta, `+${pts} puntos`);
-      } else {
-        setFeedback('❌','¡Incorrecto!',`Correcta: ${textoCorrecta}`, null);
+    // ── FINALIZAR: UNA SOLA LLAMADA AL SERVIDOR ───────────────
+    async function finalizarJuego() {
+      document.getElementById('p-pregunta').style.display = 'none';
+      document.getElementById('p-carga').innerHTML =
+        '<div class="spinner"></div><span>Guardando resultado...</span>';
+      document.getElementById('p-carga').style.display = 'flex';
+
+      const payload = { accion: 'guardar', sessionToken: TOKEN, respuestas, tiempos };
+      let data = null;
+      for (let intento = 1; intento <= 2; intento++) {
+        try {
+          data = await post(payload);
+          if (data.ok) break;
+        } catch (e) {
+          if (intento === 2) console.warn('guardar falló tras 2 intentos:', e);
+          else await new Promise(r => setTimeout(r, 1500));
+        }
       }
-
-      setTimeout(() => { ov.className = 'feedback-overlay'; resolve(); }, 1300);
-    });
-  }
-
-  function setFeedback(emoji, titulo, sub, pts) {
-    document.getElementById('fb-emoji').textContent  = emoji;
-    document.getElementById('fb-titulo').textContent = titulo;
-    document.getElementById('fb-sub').textContent    = sub;
-    const ptsEl = document.getElementById('fb-pts');
-    if (pts) { ptsEl.textContent = pts; ptsEl.style.display = 'block'; }
-    else      { ptsEl.style.display = 'none'; }
-  }
-
-  // ── FINALIZAR: UNA SOLA LLAMADA AL SERVIDOR ───────────────
-  async function finalizarJuego() {
-    document.getElementById('p-pregunta').style.display  = 'none';
-    document.getElementById('p-carga').innerHTML =
-      '<div class="spinner"></div><span>Guardando resultado...</span>';
-    document.getElementById('p-carga').style.display = 'flex';
-
-    try {
-      const data = await post({
-        accion:       'guardar',
-        sessionToken:  TOKEN,
-        respuestas,
-        tiempos
-      });
-      // Usar puntaje del servidor (fuente de verdad)
-      const pFinal = data.ok ? data.puntaje : puntaje;
+      const pFinal = (data && data.ok) ? data.puntaje : puntaje;
       mostrarFinal(pFinal, preguntas.length);
-    } catch(e) {
-      // Red fallida: mostrar igual pero avisar
-      mostrarFinal(puntaje, preguntas.length);
-      console.warn('No se pudo guardar en servidor:', e);
-    }
-  }
 
-  function mostrarFinal(pFinal, total) {
-    document.getElementById('p-carga').style.display = 'none';
-
-    document.getElementById('score-num').textContent = pFinal;
-    document.getElementById('score-max').textContent = `de ${total * 100} pts posibles`;
-
-    if (EMAIL) {
-      document.getElementById('final-email').innerHTML =
-        `<span class="email-badge">📧 ${EMAIL}</span>`;
     }
 
-    const tbody = document.getElementById('rev-body');
-    tbody.innerHTML = '';
-    historial.forEach((item, i) => {
-      const tr = document.createElement('tr');
-      let chip, tdEleg;
-      if (item.tiempoAgot) {
-        chip    = '<span class="chip-tck">⏰ Tiempo</span>';
-        tdEleg  = `<td>${chip}</td>`;
-      } else if (item.esCorrecta) {
-        chip    = '<span class="chip-ok">✓ Correcto</span>';
-        tdEleg  = `<td>${chip}<br><small>${item.elegida}</small></td>`;
-      } else {
-        chip    = '<span class="chip-mal">✗ Incorrecto</span>';
-        tdEleg  = `<td>${chip}<br><small>${item.elegida || '—'}</small></td>`;
+    function mostrarFinal(pFinal, total) {
+      document.getElementById('p-carga').style.display = 'none';
+
+      document.getElementById('score-num').textContent = pFinal;
+      document.getElementById('score-max').textContent = `de ${total * 100} pts posibles`;
+
+      if (EMAIL) {
+        document.getElementById('final-email').innerHTML =
+          `<span class="email-badge">📧 ${EMAIL}</span>`;
       }
-      tr.innerHTML =
-        `<td class="td-num">${i+1}</td>` +
-        `<td>${item.pregunta}</td>` +
-        `${tdEleg}` +
-        `<td class="td-ok">${item.textoCorrecta}</td>`;
-      tbody.appendChild(tr);
-    });
 
-    const pf = document.getElementById('pantalla-final');
-    pf.style.display = 'block';
-    pf.style.animation = 'aparecer .4s ease-out both';
-  }
+      const tbody = document.getElementById('rev-body');
+      tbody.innerHTML = '';
+      historial.forEach((item, i) => {
+        const tr = document.createElement('tr');
+        let chip, tdEleg;
+        if (item.tiempoAgot) {
+          chip = '<span class="chip-tck">⏰ Tiempo</span>';
+          tdEleg = `<td>${chip}</td>`;
+        } else if (item.esCorrecta) {
+          chip = '<span class="chip-ok">✓ Correcto</span>';
+          tdEleg = `<td>${chip}<br><small>${item.elegida}</small></td>`;
+        } else {
+          chip = '<span class="chip-mal">✗ Incorrecto</span>';
+          tdEleg = `<td>${chip}<br><small>${item.elegida || '—'}</small></td>`;
+        }
+        tr.innerHTML =
+          `<td class="td-num">${i + 1}</td>` +
+          `<td>${item.pregunta}</td>` +
+          `${tdEleg}` +
+          `<td class="td-ok">${item.textoCorrecta}</td>`;
+        tbody.appendChild(tr);
+      });
 
-  // ── HELPERS ───────────────────────────────────────────────
-  async function post(payload) {
-    const res = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify(payload)
-    });
-    return res.json();
-  }
+      const pf = document.getElementById('pantalla-final');
+      pf.style.display = 'block';
+      pf.style.animation = 'aparecer .4s ease-out both';
+    }
 
-  function mostrarError(msg) {
-    document.getElementById('p-carga').innerHTML =
-      `<div style="text-align:center;color:#b91c1c;padding:20px;">
+    // ── HELPERS ───────────────────────────────────────────────
+    async function post(payload) {
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(payload)
+      });
+      return res.json();
+    }
+
+    function mostrarError(msg) {
+      document.getElementById('p-carga').innerHTML =
+        `<div style="text-align:center;color:#b91c1c;padding:20px;">
         <div style="font-size:40px;margin-bottom:10px;">⚠️</div>
         <strong>Error</strong><br><span style="font-size:13px;">${msg}</span>
       </div>`;
-    document.getElementById('p-carga').style.display = 'flex';
-  }
+      document.getElementById('p-carga').style.display = 'flex';
+    }
 
-  // ── ARRANQUE ──────────────────────────────────────────────
-  window.addEventListener('load', iniciar);
-</script>
+    // ── ARRANQUE ──────────────────────────────────────────────
+    window.addEventListener('load', iniciar);
+  </script>
 </body>
+
 </html>
